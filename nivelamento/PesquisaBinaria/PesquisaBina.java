@@ -1,4 +1,4 @@
-public class TwoPesquisaBina {
+public class PesquisaBina {
 
     public boolean isCrescente(int[] array) {
         for (int i = 1; i < array.length; i++) {
@@ -31,7 +31,7 @@ public class TwoPesquisaBina {
     }
 
     public static void main(String[] args) {
-        TwoPesquisaBina pesquisa = new TwoPesquisaBina();
+        PesquisaBina pesquisa = new PesquisaBina();
 
         int[] array = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
         boolean resposta = pesquisa.isCrescente(array);
