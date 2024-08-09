@@ -1,6 +1,6 @@
 import java.util.Random;
 
-class OnePesquisa {
+class Pesquisa {
 
    public boolean sequencial(int array[], int x){
 
@@ -21,7 +21,7 @@ class OnePesquisa {
 
    public static void main(String[] args) {
       
-      OnePesquisa pesquisa = new OnePesquisa();
+      Pesquisa pesquisa = new Pesquisa();
 
 
       int[] array = new int[10];
