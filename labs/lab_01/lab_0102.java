@@ -1,23 +1,11 @@
-public class lab_01 {
-    
+public class lab_0102 {
+
     public boolean isMaisculas(char c){
         if (Character.isUpperCase(c)) {
             return true;
         } 
 
         return false;
-    }
-
-    public int contMais(String str){
-        int cont = 0;
-        
-        for(int i = 0; i < str.length(); i++){
-            if(isMaisculas(str.charAt(i)) == true){
-                cont++;
-            }
-        }
-
-        return cont;
     }
 
     // Método que funciona tudo
@@ -41,14 +29,10 @@ public class lab_01 {
     }
 
     public static void main(String[] args) {
-        char letra = 'a';  // Exemplo de letra
+        lab_0102 lab = new lab_0102();
 
-        lab_01 lab = new lab_01();
-
-        String str = MyIO.readString("Entre com uma palavra: ");
+        String str = MyIO.readString("");
         int number = lab.contMais_recu(str);
-        MyIO.println("Numero de maisculas: " + number);
-
-
+        MyIO.println(number);
     }
 }

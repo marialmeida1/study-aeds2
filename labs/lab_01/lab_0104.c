@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <ctype.h>
+#include <string.h>
 
 int isMaiscula(char c)
 {
@@ -9,22 +10,6 @@ int isMaiscula(char c)
     }
 
     return 0;
-}
-
-int contMais(char *str, int n)
-{
-    printf("%c", str[1]);
-    int cont = 0;
-
-    for (int i = 0; i < n; i++)
-    {
-        if (isMaiscula(str[i]))
-        {
-            cont++;
-        }
-    }
-
-    return cont;
 }
 
 int contMaisRecursivo(char *str, int index, int n)
@@ -47,7 +32,10 @@ int contMais_recu(char *str, int n){
 
 int main()
 {
+    char str[100];
+    scanf("%s", str);
 
-    int result = contMais_recu("maRi", 4);
-    printf("Tem %d maisculas", result);
+    int length = strlen(str);  // Calcula o comprimento da string
+    int result = contMais_recu(str, length);
+    printf("%d", result);
 }
