@@ -33,10 +33,13 @@ int main()
 
     char str[MAX];
 
-    while (1)
-    {
+    while (1) {
         fgets(str, MAX, stdin);
         str[strcspn(str, "\n")] = '\0';
+        if (strcmp(str, "FIM") == 0) {
+            break;
+        }
         isPalindromo(str);
     }
+    
 }
