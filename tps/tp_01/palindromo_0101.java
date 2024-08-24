@@ -3,8 +3,12 @@ import java.util.Scanner;
 public class palindromo_0101 {
 
     public void isPalindromo(String str) {
-        StringBuilder sb = new StringBuilder(str);
-        String strInverse = sb.reverse().toString();
+
+        String strInverse = "";
+        
+        for (int i = str.length() - 1; i >= 0 ; i--) {
+            strInverse += str.charAt(i);
+        }
 
         if(str.equals(strInverse)){
             System.out.println("SIM");
