@@ -6,9 +6,8 @@ public class palindromo_0101 {
 
         for (int i = str.length() - 1; i >= 0; i--) {
             strInverse += str.charAt(i);
+            int ascii = (int) str.charAt(i);
         }
-
-        
 
         if (str.equals(strInverse)) {
             MyIO.println("SIM");
@@ -23,11 +22,13 @@ public class palindromo_0101 {
 
         String str;
 
-        do {
-            str = MyIO.readLine("");
-            if(!str.equals("FIM")){
-                fnc.isPalindromo(str);
+        while (true) {
+            str = MyIO.readLine();
+            if (str.equals("FIM")) {
+                break;
             }
-        }while(!str.equals("FIM"));
+            fnc.isPalindromo(str);
+        }
+
     }
 }
