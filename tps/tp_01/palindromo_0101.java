@@ -8,6 +8,8 @@ public class palindromo_0101 {
             strInverse += str.charAt(i);
         }
 
+        
+
         if (str.equals(strInverse)) {
             MyIO.println("SIM");
         } else {
@@ -21,9 +23,11 @@ public class palindromo_0101 {
 
         String str;
 
-        while (true) {
+        do {
             str = MyIO.readLine("");
-            fnc.isPalindromo(str);
-        }
+            if(!str.equals("FIM")){
+                fnc.isPalindromo(str);
+            }
+        }while(!str.equals("FIM"));
     }
 }
