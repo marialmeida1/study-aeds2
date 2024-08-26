@@ -53,6 +53,9 @@ public class cesar_0103 {
 
         while (true) {
             str = MyIO.readLine("");
+            if (str.equals("FIM")) {
+                break;
+            }
             fnc.ciframento(str);
         }
     }
