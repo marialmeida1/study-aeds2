@@ -14,7 +14,7 @@ public class aleatorio_0104 {
                 strAux += str.charAt(i);
             }
         }
-        System.out.println(strAux);
+        System.out.println(str);
 
     }
 
