@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#define MAX 100
+#define MAX 1000
 
 // Chama o método e imprime as respostas
 void isPalindromo(char str[]) {

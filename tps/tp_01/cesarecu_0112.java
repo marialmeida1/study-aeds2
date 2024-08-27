@@ -18,12 +18,7 @@ public class cesarecu_0112 {
         char caractere = str.charAt(i); // O caracter da vez da recursividade
         int cod = (int) caractere; // O codigo da vez da recursividade
 
-        // Se estiver no intervalo (maisculo ou minisculo) pega o código e subtrai
-        if ((cod >= 88 && cod <= 90) || (cod >= 120 && cod <= 122)) {
-            codAux = cod - 23; 
-        } else { // Se não estiver, matém o padrão de somar 3
-            codAux = cod + 3; 
-        }
+        codAux = cod + 3; 
 
         char caractereAux = (char) codAux; // Transforma em char
         strAux += caractereAux; // Insere na string auxiliar

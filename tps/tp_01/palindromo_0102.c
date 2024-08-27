@@ -1,31 +1,29 @@
 #include <stdio.h>
 #include <string.h>
-#define MAX 100
+#define MAX 1000
 
-void isPalindromo(char str[]){
+int isPalindromo(char str[]){
 
-    int length = strlen(str);
-    char aux[MAX] = {0};
-    int j = 0;
-    int pali = 1;
+   int end = strlen(str) - 1; // Pega a posição final da string
+   int start = 0; // Pega a posição de inicio da string
 
-    for(int i = length - 1; i >= 0; i--){
-        aux[j] = str[i];
-        j++;
-    }
-
-    for(int i = 0; i < length; i++){
-        if(str[i] != aux[i]){
-            pali = 0;
+    while (start < end) { // Irá rodar até o inicio ser menor que o final, pois se for igual ou maior para
+        if(str[start] != str[end]){ // Se alguma posição for diferente o inicio do final já retorna falso e para o método
+            return 0;
         }
+        start++; // Soma mais uma posição ao início
+        end--; // Soma mais uma posição no final
     }
 
-    if(pali){
+    return 1; // Resposta
+}
+
+void print(int resp) {
+    if (resp) { // Se é true
         printf("SIM\n");
-    } else {
+    } else { // SE é false
         printf("NAO\n");
     }
-
 }
 
 int main()
@@ -39,7 +37,8 @@ int main()
         if (strcmp(str, "FIM") == 0) {
             break;
         }
-        isPalindromo(str);
+        int resp = isPalindromo(str);
+        print(resp);
     }
     
 }

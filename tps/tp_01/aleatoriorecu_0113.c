@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h> 
-
-#define MAX 100
+#define MAX 1000
 
 // Função recursiva para substituir letras na string
 char* replaceRecu(char str[], char letter1, char letter2, int i) {

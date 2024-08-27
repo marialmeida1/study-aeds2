@@ -2,49 +2,23 @@ public class cesar_0103 {
     
     void ciframento(String str){
 
-        char caractere;
-        int cod;
-        int codAux = 0;
-        char caractereAux;
-        String strAux = "";
+        char caractere; // Variavel que armazena qual letra está sendo lida
+        int cod; // Variavel que armazena o codigo da letra está sendo lida
+        int codAux = 0; // Novo valor do código
+        char caractereAux; // Novo valor da letra
+        String strAux = ""; // Resultado final
 
         for (int i = 0; i < str.length(); i++) {
-            caractere = str.charAt(i);
-            cod = (int) caractere;
+            caractere = str.charAt(i); // Pega a letra de acordo com a posição na string
+            cod = (int) caractere; // Pega o codigo da letra lida
 
-            if((cod >= 88 && cod <= 90) || (cod >= 120 && cod <= 122)){
-                switch (cod) {
-                    case 88:
-                        codAux = 65;
-                        break;
-                    case 89:
-                        codAux = 66;
-                        break;
-                    case 90:
-                        codAux = 67;
-                        break;
-                    case 120:
-                        codAux = 97;
-                        break;
-                    case 121:
-                        codAux = 98;
-                        break;
-                    case 122:
-                        codAux = 99;
-                        break;
-                    default:
-                        break;
-                }
-            } else {
-                codAux = cod + 3;
-            }
+            codAux = cod + 3; // Soma mais três para o novo código
 
-            caractereAux = (char) codAux;
-            strAux += caractereAux;
+            caractereAux = (char) codAux; // O caractere que será gerado de acordo com o novo código
+            strAux += caractereAux; // String final
         }
 
-        MyIO.println(strAux);
-
+        MyIO.println(strAux); // Printa o valor
     }
 
     public static void main(String[] args) {
