@@ -2,43 +2,41 @@ import java.util.Random;
 
 public class aleatorio_0104 {
     
-
+    // Substitue a ocorrencia da primeira letra pela segunda letra
     public void replace(String str, char letter1, char letter2){
 
-        String strAux = "";
+        String strAux = ""; // Retorna a nova string
 
-        for(int i = 0; i < str.length(); i++){
-            if(str.charAt(i) == letter1){
-                strAux += letter2;
+        for(int i = 0; i < str.length(); i++){ // Lê toda a string
+            if(str.charAt(i) == letter1){ // Se existe na string alguma letra como a primeira 
+                strAux += letter2; // Entra na nova string
             } else {
-                strAux += str.charAt(i);
+                strAux += str.charAt(i); // Se não, recebe o valor antigo
             }
         }
-        System.out.println(str);
+        System.out.println(strAux); // Printa a resposta
 
-    }
-
-    public void generate(String str) {
-        Random gerador = new Random();
-        gerador.setSeed(4);
-
-        char letter1 = (char)('a' + Math.abs(gerador.nextInt()) % 26);
-        char letter2 = (char)('a' + Math.abs(gerador.nextInt()) % 26);
-
-        replace(str, letter1, letter2);
     }
 
     public static void main(String[] args) {
-       aleatorio_0104 fnc = new aleatorio_0104();
+        aleatorio_0104 fnc = new aleatorio_0104();
 
         String str = "";
+
+        // Gerador de valores aleatórios
+        Random gerador = new Random();
+        gerador.setSeed(4);
 
         while (true) {
             str = MyIO.readLine("");
             if (str.equals("FIM")) {
                 break;
             }
-            fnc.generate(str);
+
+            // Gera duas letras
+            char letter1 = (char)('a' + Math.abs(gerador.nextInt()) % 26);
+            char letter2 = (char)('a' + Math.abs(gerador.nextInt()) % 26);
+            fnc.replace(str, letter1, letter2); // Insere a string + duas novas letras para o metodo "replace"
         }
     }
 }
