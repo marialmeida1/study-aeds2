@@ -14,7 +14,7 @@ public class aleatorio_0104 {
                 strAux += str.charAt(i); // Se não, recebe o valor antigo
             }
         }
-        System.out.println(strAux); // Printa a resposta
+        MyIO.println(strAux); // Printa a resposta
 
     }
 

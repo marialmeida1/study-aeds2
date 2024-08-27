@@ -106,18 +106,18 @@ public class ls_0106 {
     public void control(String str){
 
         boolean isV = isVowel(str); // Pega a resposta
-        System.out.print(isV ? "SIM " : "NAO "); // Ternário que printa o resultado
+        MyIO.print(isV ? "SIM " : "NAO "); // Ternário que printa o resultado
 
         boolean isC = isConsonant(str); // Pega a resposta
-        System.out.print(isC ? "SIM " : "NAO "); // Ternário que printa o resultado
+        MyIO.print(isC ? "SIM " : "NAO "); // Ternário que printa o resultado
         
         boolean isI = isInteger(str);  // Pega a resposta
-        System.out.print(isI ? "SIM " : "NAO "); // Ternário que printa o resultado
+        MyIO.print(isI ? "SIM " : "NAO "); // Ternário que printa o resultado
 
         boolean isR = isReal(str); // Pega a resposta
-        System.out.print(isR ? "SIM " : "NAO "); // Ternário que printa o resultado
+        MyIO.print(isR ? "SIM " : "NAO "); // Ternário que printa o resultado
 
-        System.out.println("");
+        MyIO.println("");
     }
 
     public static void main(String[] args) {
