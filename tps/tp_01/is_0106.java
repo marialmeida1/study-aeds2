@@ -1,4 +1,4 @@
-public class ls_0106 {
+public class is_0106 {
 
     // Verifica se é vogal
     public boolean isVowel(String str) {
@@ -121,7 +121,7 @@ public class ls_0106 {
     }
 
     public static void main(String[] args) {
-        ls_0106 fnc = new ls_0106();
+        is_0106 fnc = new is_0106();
         String str = "";
 
         while (true) {
