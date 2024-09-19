@@ -64,11 +64,18 @@ public class QuadroMedalhas {
 
         for (int i = 0; i < n; i++) {
             nomes[i] = entrada.next(); // Nome
-            if (entrada.hasNextInt()) {
-                medalhas[i][0] = entrada.nextInt(); // Ouro
-                medalhas[i][1] = entrada.nextInt(); // Prata
-                medalhas[i][2] = entrada.nextInt(); // Bronze
-            }
+            int g = 0, s = 0, b = 0;
+            do {
+                if (entrada.hasNextInt()) {
+                    g = entrada.nextInt(); // Ouro
+                    s = entrada.nextInt(); // Prata
+                    b = entrada.nextInt(); // Bronze
+                }
+            } while( (g <= 0 || g >= 10000) || (s <= 0 || s >= 10000) || (b <= 0 || b >= 10000));
+            
+            medalhas[i][0] = g; // Ouro
+            medalhas[i][1] = s; // Prata
+            medalhas[i][2] = b; // Bronze
         }
 
         selecao(medalhas, nomes, n);
