@@ -11,7 +11,7 @@ Dentro do repositório, encontramos algumas pastas principais, sendo elas:
   
 - **nivelamento**: Tarefas realizadas no início da matéria para nivelamento dos alunos. Inclui práticas como pesquisa binária, pesquisa sequencial e exercícios com a linguagem Java.
 
-- **provas**: Reúne todos os estudos e preparações para as provas da disciplina (Prova 01, Prova 02 e Prova 03). Dentro de cada pasta, há provas antigas, questões de estudo e um arquivo README explicando o conteúdo abordado.
+- **provas**: Reúne todos os estudos e preparações para as provas da disciplina (Prova 01, Prova 02 e Prova 03), além de provas antigas. Dentro de cada pasta, há questões de estudo e um arquivo README explicando o conteúdo abordado.
 
 - **tad**: Contém todas as estruturas de dados básicas lineares (TADs).
 
