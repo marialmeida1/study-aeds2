@@ -53,6 +53,8 @@ public class LabelNoel {
             }
             System.out.println(); // Estilização
         }
+
+        entrada.close();
     }
 
 }

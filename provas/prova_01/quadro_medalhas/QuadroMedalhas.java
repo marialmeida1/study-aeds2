@@ -83,6 +83,8 @@ public class QuadroMedalhas {
         for (int i = 0; i < n; i++) {
             System.out.println(nomes[i] + " " + medalhas[i][0] + " " + medalhas[i][1] + " " + medalhas[i][2]);
         }
+
+        entrada.close();
     }
 
 }

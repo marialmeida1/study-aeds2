@@ -44,5 +44,6 @@ class Alienigena {
         msg = entrada.nextLine();
         verification(alpha, msg, k, n);
 
+        entrada.close();
     }
 }
