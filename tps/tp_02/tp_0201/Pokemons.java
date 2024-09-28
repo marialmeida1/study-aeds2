@@ -147,24 +147,217 @@ class Pokemons {
     }
 
     // Recebe uma linha e seta valores
-    public void read(String line) {
+    public static void read(String line) {
 
-        int start = 0;
-        int end = 0;
+        Pokemons pokemon = new Pokemons(); // Objeto da classe
 
-        // Pegando o ID
+        int lenght = line.length(); // Pega o tamanho da linha
+        int start = 0; // Inicio da linha
+        int end = 0; // Final da linha
+
+        // ID
+        // Pega os valores
         end = line.indexOf(",");
         String id_str = line.substring(start, end);
         int id = Integer.parseInt(id_str);
-        setId(id);
 
-        start = end;
+        // Seta os valores
+        pokemon.setId(id);
+        System.out.println(id);
 
-        // Pegando o Name
+        // === Redimensiona a linha ===
+        line = line.substring(end + 1);
+
+
+
+        // Generation
+        // Pega valores
+        end = line.indexOf(",");
+        String generationStr = line.substring(start, end);
+        int generation = Integer.parseInt(generationStr);
+
+        // Seta valores
+        pokemon.setId(generation);
+        System.out.println(generation);
+
+        // === Redimensiona a linha ===
+        line = line.substring(end + 1);
+
+
+
+        // Name
+        // Pega valores
         end = line.indexOf(",");
         String name = line.substring(start, end);
-        setName(name);
 
+        // Seta valores
+        pokemon.setName(name);
+        System.out.println(name);
+
+        // === Redimensiona a linha ===
+        line = line.substring(end + 1);
+
+
+
+        // Description
+        // Pega valores
+        end = line.indexOf(",");
+        String description = line.substring(start, end);
+
+        // Seta valores
+        pokemon.setDescription(description);
+        System.out.println(description);
+
+        // === Redimensiona a linha ===
+        line = line.substring(end + 1);
+
+
+
+        // Type
+        ArrayList<String> types = new ArrayList<>(); // Cria uma lista
+        // Seta valores
+        end = line.indexOf(",");
+        String type1 = line.substring(start, end);
+        types.add(type1);
+
+        // === Redimensiona a linha ===
+        line = line.substring(end + 1);
+
+        // Seta valores
+        end = line.indexOf(",");
+        String type2 = line.substring(start, end);
+        types.add(type2);
+
+        // Seta valor -> FINAL
+        pokemon.setTypes(types);
+
+        // === Redimensiona a linha ===
+        line = line.substring(end + 1);
+
+        // Seta valor
+        System.out.println(type1 + " " + type2);
+
+
+
+
+        // Abilities
+        // Pega valores
+        start = line.indexOf("[");
+        end = line.indexOf("]");
+
+        // === Redimensiona a linha ===
+        String expression = line.substring(start + 1, end);
+        line = line.substring(end);
+
+        ArrayList<String> abilities = new ArrayList<>(); // Cria array
+
+        // Pega todos os valores
+        while (true) {
+            // Localiza a primeira ocorrência 
+            start = expression.indexOf("'");
+            // Se não houver mais sai
+            if (start == -1) {
+                break;
+            }
+
+            // Organiza expressão
+            end = expression.indexOf("'", start + 1); // Pega o final dela
+            String ability = expression.substring(start + 1, end); // Seta ela começando do inicio da palavra até 
+            abilities.add(ability);
+            expression = expression.substring(end + 1);
+        }        
+
+        // Seta valores
+        for (String item : abilities) {
+            System.out.println("Ab: " + item);
+        }
+        pokemon.setAbilities(abilities);
+
+
+        // Incializa a linha novamente
+        end = line.indexOf(",");
+        line = line.substring(end + 1);
+        start = 0; // Start reiniciado
+
+
+
+
+        // Weight
+        // Pega valores
+        end = line.indexOf(",");
+        String weightStr = line.substring(start, end);
+        double weight = 0.0;
+        if(!weightStr.isEmpty()){
+            weight = Double.parseDouble(weightStr);
+        }
+
+        // Seta valores
+        pokemon.setWeight(weight);
+        System.out.println(weight);
+
+        // === Redimensiona a linha ===
+        line = line.substring(end + 1);
+
+        // Height
+        // Pega valores
+        end = line.indexOf(",");
+        String heightStr = line.substring(start, end);
+        double height = 0.0;
+        if(!heightStr.isEmpty()){
+            height = Double.parseDouble(heightStr);
+        }
+
+        // Seta valores
+        pokemon.setHeight(height);
+        System.out.println(height);
+
+        // === Redimensiona a linha ===
+        line = line.substring(end + 1);
+
+
+
+
+        // CaptureRate
+        // Pega valores
+        end = line.indexOf(",");
+        String captureRateStr = line.substring(start, end);
+        int captureRate = 0;
+        if(!captureRateStr.isEmpty()){
+            captureRate = Integer.parseInt(captureRateStr);
+        }
+
+
+        // Seta valores
+        pokemon.setCaptureRate(captureRate);
+        System.out.println(captureRate);
+
+        // === Redimensiona a linha ===
+        line = line.substring(end + 1);
+
+
+
+        // IsLegendary
+        // Pega valores
+        end = line.indexOf(",");
+        String isLegendaryStr = line.substring(start, end);
+        boolean isLegendary = false;
+        if(!isLegendaryStr.isEmpty()){
+            isLegendary = Boolean.parseBoolean(isLegendaryStr);
+        }
+
+        // Seta valores
+        pokemon.setIsLegendary(isLegendary);
+        System.out.println(isLegendary);
+
+        // === Redimensiona a linha ===
+        line = line.substring(end + 1);
+
+
+
+
+        // CaptureDate
+        String captureDateStr = line;
+        System.out.println(line);
     }
 
     /*
@@ -193,6 +386,10 @@ class Pokemons {
             pokemon.read(ln);
             listPokemons.add(pokemon); // Adiciona na lista de pokemons
         }
+    }
+
+    public static void main(String[] args) {
+        read("105,1,Marowak,Bone Keeper Pokémon,ground,fire,\"['Rock Head', 'Lightningrod', 'Battle Armor', 'Cursed Body', 'Lightningrod', 'Rock Head']\",,,75,0,29/02/1996");
     }
 
 }
