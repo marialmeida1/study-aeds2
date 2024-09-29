@@ -382,7 +382,7 @@ class Pokemons {
             // Inicializa o construtor
             Pokemons pokemon = new Pokemons();
             // Pega a linha recebida e insere dentro do objeto de pokemons com os seus
-            // seguintes atributos
+            // Seguintes atributos
             pokemon.read(ln);
             listPokemons.add(pokemon); // Adiciona na lista de pokemons
         }
