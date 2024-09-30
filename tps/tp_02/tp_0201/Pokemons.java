@@ -2,13 +2,17 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Scanner;
 
 class Pokemons {
 
     // Variáveis globais
-    public static ArrayList<Pokemons> listPokemons;
+    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+    public static ArrayList<Pokemons> listPokemons = new ArrayList<Pokemons>();
     public static String PATH = "/tmp/pokemon.csv";
 
     // Atributos privados
@@ -133,25 +137,23 @@ class Pokemons {
 
     public void print() {
         System.out.println(
-                "[#" + this.getId() +
-                        "->" + this.getName() +
-                        ":" + this.getDescription() +
-                        " - [" + this.getTypes() +
-                        "] - [" + getAbilities() +
-                        "] - " + this.getWeight() +
-                        " - " + this.getHeight() +
-                        " - " + this.getCaptureRate() +
-                        " - " + this.getIsLegendary() +
-                        " - " + this.getGeneration() +
-                        "] - " + this.getCaptureDate());
+            "[#" + this.getId() + 
+            " -> " + this.getName() + 
+            ": " + this.getDescription() + 
+            " - " + this.getTypes() + 
+            " - " + this.getAbilities() + 
+            " - " + this.getWeight() + "kg" + 
+            " - " + this.getHeight() + "m" + 
+            " - " + this.getCaptureRate() + "%" + 
+            " - " + this.getIsLegendary() + 
+            " - " + this.getGeneration() + " gen" + 
+            "] - " + formatter.format(this.getCaptureDate()));
     }
+    
 
     // Recebe uma linha e seta valores
-    public static void read(String line) {
+    public void read(String line) {
 
-        Pokemons pokemon = new Pokemons(); // Objeto da classe
-
-        int lenght = line.length(); // Pega o tamanho da linha
         int start = 0; // Inicio da linha
         int end = 0; // Final da linha
 
@@ -162,13 +164,10 @@ class Pokemons {
         int id = Integer.parseInt(id_str);
 
         // Seta os valores
-        pokemon.setId(id);
-        System.out.println(id);
+        this.setId(id);
 
         // === Redimensiona a linha ===
         line = line.substring(end + 1);
-
-
 
         // Generation
         // Pega valores
@@ -177,13 +176,10 @@ class Pokemons {
         int generation = Integer.parseInt(generationStr);
 
         // Seta valores
-        pokemon.setId(generation);
-        System.out.println(generation);
+        this.setGeneration(generation);
 
         // === Redimensiona a linha ===
         line = line.substring(end + 1);
-
-
 
         // Name
         // Pega valores
@@ -191,13 +187,10 @@ class Pokemons {
         String name = line.substring(start, end);
 
         // Seta valores
-        pokemon.setName(name);
-        System.out.println(name);
+        this.setName(name);
 
         // === Redimensiona a linha ===
         line = line.substring(end + 1);
-
-
 
         // Description
         // Pega valores
@@ -205,20 +198,21 @@ class Pokemons {
         String description = line.substring(start, end);
 
         // Seta valores
-        pokemon.setDescription(description);
-        System.out.println(description);
+        this.setDescription(description);
 
         // === Redimensiona a linha ===
         line = line.substring(end + 1);
-
-
 
         // Type
         ArrayList<String> types = new ArrayList<>(); // Cria uma lista
         // Seta valores
         end = line.indexOf(",");
         String type1 = line.substring(start, end);
-        types.add(type1);
+        if(type1.isEmpty()){
+            types.add("");
+        } else {
+            types.add("'" + type1 + "'");
+        }
 
         // === Redimensiona a linha ===
         line = line.substring(end + 1);
@@ -226,19 +220,17 @@ class Pokemons {
         // Seta valores
         end = line.indexOf(",");
         String type2 = line.substring(start, end);
-        types.add(type2);
+        if(type2.isEmpty()){
+            types.add("");
+        } else {
+            types.add("'" + type2 + "'");
+        }
 
         // Seta valor -> FINAL
-        pokemon.setTypes(types);
+        this.setTypes(types);
 
         // === Redimensiona a linha ===
         line = line.substring(end + 1);
-
-        // Seta valor
-        System.out.println(type1 + " " + type2);
-
-
-
 
         // Abilities
         // Pega valores
@@ -253,7 +245,7 @@ class Pokemons {
 
         // Pega todos os valores
         while (true) {
-            // Localiza a primeira ocorrência 
+            // Localiza a primeira ocorrência
             start = expression.indexOf("'");
             // Se não houver mais sai
             if (start == -1) {
@@ -262,38 +254,30 @@ class Pokemons {
 
             // Organiza expressão
             end = expression.indexOf("'", start + 1); // Pega o final dela
-            String ability = expression.substring(start + 1, end); // Seta ela começando do inicio da palavra até 
-            abilities.add(ability);
+            String ability = expression.substring(start + 1, end); // Seta ela começando do inicio da palavra até
+            abilities.add("'" + ability + "'");
             expression = expression.substring(end + 1);
-        }        
+        }
 
         // Seta valores
-        for (String item : abilities) {
-            System.out.println("Ab: " + item);
-        }
-        pokemon.setAbilities(abilities);
-
+        this.setAbilities(abilities);
 
         // Incializa a linha novamente
         end = line.indexOf(",");
         line = line.substring(end + 1);
         start = 0; // Start reiniciado
 
-
-
-
         // Weight
         // Pega valores
         end = line.indexOf(",");
         String weightStr = line.substring(start, end);
         double weight = 0.0;
-        if(!weightStr.isEmpty()){
+        if (!weightStr.isEmpty()) {
             weight = Double.parseDouble(weightStr);
         }
 
         // Seta valores
-        pokemon.setWeight(weight);
-        System.out.println(weight);
+        this.setWeight(weight);
 
         // === Redimensiona a linha ===
         line = line.substring(end + 1);
@@ -303,61 +287,58 @@ class Pokemons {
         end = line.indexOf(",");
         String heightStr = line.substring(start, end);
         double height = 0.0;
-        if(!heightStr.isEmpty()){
+        if (!heightStr.isEmpty()) {
             height = Double.parseDouble(heightStr);
         }
 
         // Seta valores
-        pokemon.setHeight(height);
-        System.out.println(height);
+        this.setHeight(height);
 
         // === Redimensiona a linha ===
         line = line.substring(end + 1);
-
-
-
 
         // CaptureRate
         // Pega valores
         end = line.indexOf(",");
         String captureRateStr = line.substring(start, end);
         int captureRate = 0;
-        if(!captureRateStr.isEmpty()){
+        if (!captureRateStr.isEmpty()) {
             captureRate = Integer.parseInt(captureRateStr);
         }
 
-
         // Seta valores
-        pokemon.setCaptureRate(captureRate);
-        System.out.println(captureRate);
+        this.setCaptureRate(captureRate);
 
         // === Redimensiona a linha ===
         line = line.substring(end + 1);
-
-
 
         // IsLegendary
         // Pega valores
         end = line.indexOf(",");
         String isLegendaryStr = line.substring(start, end);
         boolean isLegendary = false;
-        if(!isLegendaryStr.isEmpty()){
+        if (!isLegendaryStr.isEmpty()) {
             isLegendary = Boolean.parseBoolean(isLegendaryStr);
         }
 
         // Seta valores
-        pokemon.setIsLegendary(isLegendary);
-        System.out.println(isLegendary);
+        this.setIsLegendary(isLegendary);
 
         // === Redimensiona a linha ===
         line = line.substring(end + 1);
 
-
-
-
         // CaptureDate
+        // Pega valores
         String captureDateStr = line;
-        System.out.println(line);
+
+        // Seta valores
+        try {
+            Date captureDate = formatter.parse(captureDateStr);
+            this.setCaptureDate(captureDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /*
@@ -367,29 +348,66 @@ class Pokemons {
      */
 
     // Seta dentro da Lista Total os valores do CSV
-    public void setListPokemons() throws IOException {
-        // Pega o arquivo lê primeiro como binário
-        FileInputStream file = new FileInputStream(PATH);
-        // Pega uma linha específica do arquivo -> que estava em binário e agora
-        // convertido em caracteres
-        BufferedReader line = new BufferedReader(new InputStreamReader(file));
+    public static void setListPokemons() {
+        try {
+            // Pega o arquivo lê primeiro como binário
+            FileInputStream file = new FileInputStream(PATH);
+            // Pega uma linha específica do arquivo -> que estava em binário e agora
+            // convertido em caracteres
+            BufferedReader line = new BufferedReader(new InputStreamReader(file));
 
-        // Leitura de uma linha'
-        String ln = line.readLine();
+            // Leitura de uma linha'
+            String ln = line.readLine();
 
-        // Vai ler até que a leitura da linha não seja NULL
-        while ((ln = line.readLine()) != null) {
-            // Inicializa o construtor
-            Pokemons pokemon = new Pokemons();
-            // Pega a linha recebida e insere dentro do objeto de pokemons com os seus
-            // Seguintes atributos
-            pokemon.read(ln);
-            listPokemons.add(pokemon); // Adiciona na lista de pokemons
+            // Vai ler até que a leitura da linha não seja NULL
+            while ((ln = line.readLine()) != null) {
+
+                // Inicializa o construtor
+                Pokemons pokemon = new Pokemons();
+                // Pega a linha recebida e insere dentro do objeto de pokemons com os seus
+                // Seguintes atributos
+                pokemon.read(ln);
+                listPokemons.add(pokemon); // Adiciona na lista de pokemons
+            }
+
+            line.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
+    public static Pokemons findID(int id, ArrayList<Pokemons> pokemons) {
+
+        for (int i = 0; i < pokemons.size(); i++) {
+            if (pokemons.get(i).getId() == id) {
+                return pokemons.get(i);
+            }
+        }
+        return null;
+    }
+
     public static void main(String[] args) {
-        read("105,1,Marowak,Bone Keeper Pokémon,ground,fire,\"['Rock Head', 'Lightningrod', 'Battle Armor', 'Cursed Body', 'Lightningrod', 'Rock Head']\",,,75,0,29/02/1996");
+
+        setListPokemons();
+        Scanner input = new Scanner(System.in);
+        Pokemons pokemon = new Pokemons();
+        String ln = input.nextLine();
+
+        while (!ln.equals("FIM")) {
+            int id = Integer.parseInt(ln);
+            pokemon = findID(id, listPokemons);
+
+            if (pokemon != null) {
+                pokemon.print();
+            } else {
+                System.out.println("Pokemon não encontrado!");
+            }
+
+            ln = input.nextLine();
+        }
+
+        input.close();
+
     }
 
 }
