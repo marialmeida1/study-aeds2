@@ -326,7 +326,11 @@ class Pokemons {
         String isLegendaryStr = line.substring(start, end);
         boolean isLegendary = false;
         if (!isLegendaryStr.isEmpty()) {
-            isLegendary = Boolean.parseBoolean(isLegendaryStr);
+            if(isLegendaryStr.equals("1")){
+                isLegendary = true;
+            } else {
+                isLegendary = false;
+            }
         }
 
         // Seta valores
