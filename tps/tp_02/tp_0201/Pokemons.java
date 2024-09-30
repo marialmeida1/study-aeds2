@@ -29,6 +29,17 @@ class Pokemons {
     private Date captureDate;
 
     public Pokemons() {
+        this.id = 0;
+        this.generation = 0;
+        this.name = "";
+        this.description = "";
+        this.types = new ArrayList<String>();
+        this.abilities = new ArrayList<String>();
+        this.weight = 0.0;
+        this.height = 0.0;
+        this.captureRate = 0;
+        this.isLegendary = false;
+        this.captureDate = null;
     }
 
     public Pokemons(int id, int generation, String name, String description, ArrayList<String> types,
@@ -137,19 +148,18 @@ class Pokemons {
 
     public void print() {
         System.out.println(
-            "[#" + this.getId() + 
-            " -> " + this.getName() + 
-            ": " + this.getDescription() + 
-            " - " + this.getTypes() + 
-            " - " + this.getAbilities() + 
-            " - " + this.getWeight() + "kg" + 
-            " - " + this.getHeight() + "m" + 
-            " - " + this.getCaptureRate() + "%" + 
-            " - " + this.getIsLegendary() + 
-            " - " + this.getGeneration() + " gen" + 
-            "] - " + formatter.format(this.getCaptureDate()));
+                "[#" + this.getId() +
+                        " -> " + this.getName() +
+                        ": " + this.getDescription() +
+                        " - " + this.getTypes() +
+                        " - " + this.getAbilities() +
+                        " - " + this.getWeight() + "kg" +
+                        " - " + this.getHeight() + "m" +
+                        " - " + this.getCaptureRate() + "%" +
+                        " - " + this.getIsLegendary() +
+                        " - " + this.getGeneration() + " gen" +
+                        "] - " + formatter.format(this.getCaptureDate()));
     }
-    
 
     // Recebe uma linha e seta valores
     public void read(String line) {
@@ -208,7 +218,7 @@ class Pokemons {
         // Seta valores
         end = line.indexOf(",");
         String type1 = line.substring(start, end);
-        if(type1.isEmpty()){
+        if (type1.isEmpty()) {
             types.add("");
         } else {
             types.add("'" + type1 + "'");
@@ -220,7 +230,7 @@ class Pokemons {
         // Seta valores
         end = line.indexOf(",");
         String type2 = line.substring(start, end);
-        if(type2.isEmpty()){
+        if (type2.isEmpty()) {
             types.add("");
         } else {
             types.add("'" + type2 + "'");
@@ -339,6 +349,21 @@ class Pokemons {
             e.printStackTrace();
         }
 
+    }
+
+    public Pokemons clone() {
+        return new Pokemons(
+                this.id,
+                this.generation,
+                this.name,
+                this.description,
+                this.types,
+                this.abilities,
+                this.weight,
+                this.height,
+                this.captureRate,
+                this.isLegendary,
+                this.captureDate);
     }
 
     /*
