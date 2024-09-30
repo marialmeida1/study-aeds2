@@ -230,11 +230,9 @@ class Pokemons {
         // Seta valores
         end = line.indexOf(",");
         String type2 = line.substring(start, end);
-        if (type2.isEmpty()) {
-            types.add("");
-        } else {
+        if (!type2.isEmpty()) {
             types.add("'" + type2 + "'");
-        }
+        } 
 
         // Seta valor -> FINAL
         this.setTypes(types);
