@@ -3,13 +3,14 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-// Tamanhos definidos
-#define MAX_STRING 1000
+// Variáveis globais
+#define MAX_STRING 1024
 #define MAX_LIST 10
 #define MAX_CLASS 1000
-#define MAX_LINE 1024
 
-// Classe de "Date"
+// Estruturas de struct
+
+// Date -> armazena a data do Pokemon
 typedef struct
 {
     int day;
@@ -17,15 +18,20 @@ typedef struct
     int year;
 } Date;
 
-// Classe de Pokemon
-typedef struct
+typedef struct // "Classe" Lista
+{
+    int n;
+    char *element[MAX_LIST];
+} List;
+
+typedef struct // "Classe" Pokemons
 {
     int id;
     int generation;
-    char *name;
-    char *description;
-    char **types;     // Lista
-    char **abilities; // Lista
+    char name[MAX_STRING];
+    char description[MAX_STRING];
+    List types;     // Lista -> aponta para uma posição da lista
+    List abilities; // Lista -> aponta para uma posição da lista
     double weight;
     double height;
     int captureRate;
@@ -33,18 +39,59 @@ typedef struct
     Date captureDate;
 } Pokemons;
 
-// Funções auxiliares
+// ====== GERENCIAMENTO DA LISTA ======
+// Inciar lista
+void initList(List *list)
+{
+    list->n = 0;
+    for (int i = 0; i < MAX_LIST; i++)
+    {
+        list->element[i] = NULL; // Inicializa os elementos como NULL
+    }
+}
+
+// Insere no início da lista
+int insertList(List *list, char *el)
+{
+    if (list->n < MAX_LIST)
+    {
+        list->element[list->n] = (char *)malloc(strlen(el) + 1);
+        if (list->element[list->n] != NULL)
+        {
+            strcpy(list->element[list->n], el);
+            list->n++;
+            return 1;
+        }
+    }
+    return 0;
+}
+
+// Mostra elementos da lista
+void showList(List *list)
+{
+    for (int i = 0; i < list->n; i++)
+    {
+        printf("'%s'", list->element[i]);
+        if (list->element[i + 1] != NULL)
+        {
+            printf(", ");
+        }
+    }
+}
+
+// ======= FUNÇÕES AUXILIARES =======
+// Pega a posição do caracter procurado
 int indexOf(const char *str, const char *find)
 {
     char *pos = strstr(str, find);
     if ((pos != NULL))
     {
-        int value = pos - str;
         return pos - str;
     }
     return -1;
 }
 
+// Retorna um recorte de uma string
 char *substring(const char *str, int start, int lenght)
 {
     // Se "não foi" colocado valor seta como o tamanho da string
@@ -101,264 +148,49 @@ char *formatDate(Date date)
     return dateStr;
 }
 
-// Construtor
-void ConstPokemons(Pokemons *pokemons, int id, int generation, char *name, char *description, char **types,
-                   char **abilities, double weight, double height, int captureRate, bool isLegendary,
-                   Date captureDate)
+// ========= Funções básicas para a manipulação da classe pokemons ========
+// Construtor da classe Pokemons
+void initPokemon(Pokemons *pokemon, int id, int generation, const char *name, const char *description,
+                 double weight, double height, int captureRate, bool isLegendary, Date captureDate)
 {
+    pokemon->id = id;
+    pokemon->generation = generation;
+    strncpy(pokemon->name, name, MAX_STRING);
+    strncpy(pokemon->description, description, MAX_STRING);
+    pokemon->weight = weight;
+    pokemon->height = height;
+    pokemon->captureRate = captureRate;
+    pokemon->isLegendary = isLegendary;
+    pokemon->captureDate = captureDate;
 
-    // Diretamente
-    pokemons->id = id;
-    pokemons->generation = generation;
-
-    // Alocando memórias
-    pokemons->name = malloc(MAX_STRING);
-    strcpy(pokemons->name, name);
-    pokemons->description = malloc(MAX_STRING);
-    strcpy(pokemons->description, description);
-
-    // Lista de tamanho 2 -> Cria um String em cada posição
-    pokemons->types = malloc(2 * sizeof(char *));
-    for (int i = 0; i < 2; i++)
-    {
-        pokemons->types[i] = malloc(MAX_STRING + 1); // Tamanho de uma string
-        strcpy(pokemons->types[i], types[i]);
-    }
-
-    // Lista de tamanho MAX_LIST = 10 -> Cria um String em cada posição
-    pokemons->abilities = malloc(MAX_LIST * sizeof(char *));
-    for (int i = 0; i < MAX_LIST; i++)
-    {
-        pokemons->abilities[i] = malloc(MAX_STRING + 1); // Tamanho de uma string
-        strcpy(pokemons->abilities[i], abilities[i]);
-    }
-
-    // Diretamente
-    pokemons->weight = weight;
-    pokemons->height = height;
-    pokemons->captureRate = captureRate;
-    pokemons->isLegendary = isLegendary;
-    pokemons->captureDate = captureDate;
+    initList(&pokemon->types);
+    initList(&pokemon->abilities);
 }
 
-// Getter
-int getId(Pokemons *pokemons)
-{
-    return pokemons->id;
-}
-
-int getGeneration(Pokemons *pokemons)
-{
-    return pokemons->generation;
-}
-
-char *getName(Pokemons *pokemons)
-{
-    return pokemons->name;
-}
-
-char *getDescription(Pokemons *pokemons)
-{
-    return pokemons->description;
-}
-
-char **getTypes(Pokemons *pokemons)
-{
-    return pokemons->types;
-}
-
-char **getAbilities(Pokemons *pokemons)
-{
-    return pokemons->abilities;
-}
-
-double getWeight(Pokemons *pokemons)
-{
-    return pokemons->weight;
-}
-
-double getHeight(Pokemons *pokemons)
-{
-    return pokemons->height;
-}
-
-int getCaptureRate(Pokemons *pokemons)
-{
-    return pokemons->captureRate;
-}
-
-bool getIsLegendary(Pokemons *pokemons)
-{
-    return pokemons->isLegendary;
-}
-
-char *getCaptureDate(Pokemons *pokemons)
-{
-    return formatDate(pokemons->captureDate);
-}
-
-// Setter
-void setId(Pokemons *pokemons, int id)
-{
-    pokemons->id = id;
-}
-
-void setGeneration(Pokemons *pokemons, int generation)
-{
-    pokemons->generation = generation;
-}
-
-void setName(Pokemons *pokemons, char *name)
-{
-    pokemons->name = strdup(name);
-}
-
-void setDescription(Pokemons *pokemons, char *description)
-{
-    pokemons->description = strdup(description);
-}
-
-void setTypes(Pokemons *pokemons, char **types)
-{
-    pokemons->types = malloc(2 * sizeof(char *)); // Aloca memória 
-    if (pokemons->types == NULL)
-    {
-        printf(stderr, "Erro na alocação de memória para tipos\n");
-        return;
-    }
-
-    // Copia dados | Tamanho 2
-    for (int i = 0; i < 2; i++)
-    {
-        if (types[i] != NULL) // Verifica se a string não é nula
-        {                                        
-            pokemons->types[i] = strdup(types[i]); // Copia a string
-            if (pokemons->types[i] == NULL) // Verificação
-            {
-                fprintf(stderr, "Erro na duplicação do tipo\n");
-                exit(1);
-            }
-        }
-        else
-        {
-            pokemons->types[i] = NULL; // Se NULL = NULL
-        }
-    }
-}
-
-void setAbilities(Pokemons *pokemons, char **abilities)
-{
-
-    pokemons->abilities = malloc(MAX_LIST * sizeof(char *)); // Aloca memória 
-    if (pokemons->abilities == NULL) // Verificação
-    {
-        printf("Falha na alocação de memória\n");
-        exit(1);
-    }
-
-    // Insere dados - tamanho MAX_LIST = 10
-    for (int i = 0; i < MAX_LIST; i++) 
-    {
-        pokemons->abilities[i] = malloc(MAX_STRING * sizeof(char)); // Insere valores
-        if (pokemons->abilities[i] == NULL) // Verificação
-        {
-            printf("Falha na alocação de memória para a habilidade %d\n", i);
-            exit(1);
-        }
-
-        // Copia dados
-        if (abilities[i] != NULL)
-        {
-            strcpy(pokemons->abilities[i], abilities[i]);
-        }
-        else
-        {
-            pokemons->abilities[i] = NULL; // Se NULL = NULL
-        }
-    }
-}
-
-void *setWeight(Pokemons *pokemons, double weight)
-{
-    pokemons->weight = weight;
-}
-
-void *setHeight(Pokemons *pokemons, double height)
-{
-    pokemons->height = height;
-}
-
-void *setCaptureRate(Pokemons *pokemons, int captureRate)
-{
-    pokemons->captureRate = captureRate;
-}
-
-void *setIsLegendary(Pokemons *pokemons, bool isLegendary)
-{
-    pokemons->isLegendary = isLegendary;
-}
-
-void *setCaptureDate(Pokemons *pokemons, Date captureDate)
-{
-    pokemons->captureDate = captureDate;
-}
-
+// Printa a classe Pokemons
 void print(Pokemons *pokemons)
 {
-
-    if (pokemons == NULL || getId(pokemons) == 0 || getName(pokemons) == NULL || getDescription(pokemons) == NULL)
+    if (pokemons == NULL || pokemons->id == 0 || pokemons->name == NULL || pokemons->description == NULL)
     {
         return; // Sai da função se o Pokémon não for válido
     }
 
-    printf(
-        "[#%d -> %s: ",
-        getId(pokemons),
-        getName(pokemons));
-
-    printf("%s - ", getDescription(pokemons));
-
-    char **types = getTypes(pokemons);
-
-    if (types == NULL)
-    {
-        return;
-    }
-
+    printf("[#%d -> %s: ", pokemons->id, pokemons->name);
+    printf("%s - ", pokemons->description);
     printf("[");
-    for (int i = 0; i < 2; i++) 
-    {
-        if (types[i] != NULL && strcmp(types[i], "") != 0)
-        {
-            if (i > 0)
-            {
-                printf(", ");
-            }
-            printf("'%s'", types[i]);
-        }
-    }
+    showList(&pokemons->types);
     printf("] - ");
-
-    char **abilities = getAbilities(pokemons);
     printf("[");
-    for (int i = 0; abilities[i] != NULL; i++) // Até ser diferente de null
-    {
-        printf("'%s'", abilities[i]);
-        if (abilities[i + 1] != NULL)
-        {
-            printf(", ");
-        }
-    }
+    showList(&pokemons->abilities);
     printf("] - ");
-
     printf(
         "%.1fkg - %.1fm - %d%% - %s - %d gen] - %s\n",
-        getWeight(pokemons),
-        getHeight(pokemons),
-        getCaptureRate(pokemons),
-        getIsLegendary(pokemons) ? "true" : "false",
-        getGeneration(pokemons),
-        getCaptureDate(pokemons));
+        pokemons->weight,
+        pokemons->height,
+        pokemons->captureRate,
+        pokemons->isLegendary ? "true" : "false",
+        pokemons->generation,
+        formatDate(pokemons->captureDate));
 }
 
 void read(char *line, Pokemons *pokemons)
@@ -372,8 +204,7 @@ void read(char *line, Pokemons *pokemons)
     char *id_str = substring(line, 0, end);
     line = substring(line, end + 1, 0);
     int id = atoi(id_str);
-    setId(pokemons, id);
-    free(id_str);
+    pokemons->id = id;
 
     // Generation
     // Pega valores
@@ -381,29 +212,25 @@ void read(char *line, Pokemons *pokemons)
     char *generation_str = substring(line, 0, end);
     line = substring(line, end + 1, 0);
     int generation = atoi(generation_str);
-    setGeneration(pokemons, generation);
-    free(generation_str);
+    pokemons->generation = generation;
 
     // Name
     // Pega valores
     end = indexOf(line, ",");
     char *name = substring(line, 0, end);
     line = substring(line, end + 1, 0);
-    setName(pokemons, name);
-    free(name);
+    strcpy(pokemons->name, name);
 
     // Description
     // Pega valores
     end = indexOf(line, ",");
     char *description = substring(line, 0, end);
     line = substring(line, end + 1, 0);
-    setDescription(pokemons, description);
-    free(description);
+    strcpy(pokemons->description, description);
 
     // PEGANDO TYPE
     //================
-    char **types = malloc(2 * sizeof(char *));
-
+    initList(&pokemons->types);
     // Type1
     // Pega valores
     end = indexOf(line, ",");
@@ -415,27 +242,19 @@ void read(char *line, Pokemons *pokemons)
     end = indexOf(line, ",");
     char *type2 = substring(line, 0, end);
     line = substring(line, end + 1, 0);
-
-    // Setando valores
-    types[0] = strdup(type1);
+    insertList(&pokemons->types, type1);
     if (end != 0)
     {
-        types[1] = strdup(type2);
+        insertList(&pokemons->types, type2);
     }
-    setTypes(pokemons, types);
-    for (int i = 0; i < 2; i++)
-    {
-        free(types[i]); // Free after setting
-    }
-    free(types);
-
-    // Liberando memória
+    free(type1);
+    free(type2);
 
     // PEGANDO ABILITIES
     // =======================
+    initList(&pokemons->abilities);
     start = indexOf(line, "[") + 1;
     end = indexOf(line, "]");
-    char **abilities_array = malloc(MAX_LIST * sizeof(char *));
 
     // === Redimensiona a linha ===
     char *expression = substring(line, start, end - start);
@@ -451,26 +270,19 @@ void read(char *line, Pokemons *pokemons)
             abilities = substring(expression, 1, strlen(expression) - 2);
             if (abilities != NULL)
             {
-                abilities_array[n] = abilities;
+                insertList(&pokemons->abilities, abilities);
             }
             break;
         }
         abilities = substring(expression, 1, start - 2);
         if (abilities != NULL)
         {
-            abilities_array[n] = abilities;
+            insertList(&pokemons->abilities, abilities);
         }
         expression = substring(expression, start + 2, 0);
         n++;
     } while (n < MAX_LIST);
-
-    setAbilities(pokemons, abilities_array);
     free(expression);
-    for (int i = 0; i < n; i++)
-    {
-        free(abilities_array[i]);
-    }
-    free(abilities_array);
 
     start = 0;
 
@@ -480,7 +292,7 @@ void read(char *line, Pokemons *pokemons)
     char *weight_str = substring(line, 0, end);
     line = substring(line, end + 1, 0);
     double weight = atof(weight_str);
-    setWeight(pokemons, weight);
+    pokemons->weight = weight;
     free(weight_str);
 
     // Height
@@ -489,7 +301,7 @@ void read(char *line, Pokemons *pokemons)
     char *height_str = substring(line, 0, end);
     line = substring(line, end + 1, 0);
     double height = atof(height_str);
-    setHeight(pokemons, height);
+    pokemons->height = height;
     free(height_str);
 
     // CaptureRate
@@ -498,7 +310,7 @@ void read(char *line, Pokemons *pokemons)
     char *captureRate_str = substring(line, 0, end);
     line = substring(line, end + 1, 0);
     int captureRate = atoi(captureRate_str);
-    setCaptureRate(pokemons, captureRate);
+    pokemons->captureRate = captureRate;
     free(captureRate_str);
 
     // IsLegendary
@@ -508,19 +320,18 @@ void read(char *line, Pokemons *pokemons)
     line = substring(line, end + 1, 0);
     int isLegendary_int = atoi(isLegendary_str);
     bool isLegendary = (isLegendary_int != 0);
-    setIsLegendary(pokemons, isLegendary);
+    pokemons->isLegendary = isLegendary;
     free(isLegendary_str);
 
     // CaptureRate
     // Pega valores
     Date date = insertDate(line);
-    setCaptureDate(pokemons, date);
+    pokemons->captureDate = date;
 }
 
-// Variável Global
+// Variáveis globais
 static Pokemons listPokemons[MAX_CLASS];
 static char PATH[] = "/tmp/pokemon.csv";
-
 /*
  * ======================================================
  * MÉTODOS DE INTERAÇÃO DOS DADOS
@@ -537,7 +348,7 @@ void setListPokemons()
     }
 
     // Pular a primeira linha
-    char line[MAX_LINE];
+    char line[MAX_STRING];
     if (fgets(line, sizeof(line), file) == NULL) // Verificação
     {
         printf("Erro ao ler a primeira linha ou arquivo vazio.\n");
@@ -563,7 +374,6 @@ void setListPokemons()
     fclose(file);
 }
 
-
 Pokemons *findID(int id)
 {
     for (int i = 0; i < MAX_CLASS; i++)
@@ -579,9 +389,12 @@ Pokemons *findID(int id)
 
 int main()
 {
+    /*Pokemons pk;
+    read("181,2,Ampharos,Light Pokémon,electric,,\"['Static', 'Plus']\",61.5,1.4,45,0,25/05/1999", &pk);*/
+
     setListPokemons();
-    char ln[MAX_LINE];
-    while (fgets(ln, sizeof(MAX_LINE), stdin))
+    char ln[MAX_STRING];
+    while (fgets(ln, sizeof(MAX_STRING), stdin))
     {
         ln[strcspn(ln, "\n")] = 0;
         if (strcmp(ln, "FIM") == 0)
