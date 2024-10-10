@@ -1,0 +1,2 @@
+Matrícula	Tempo	BigO	Valor de Movimentações	Valor de Comparações
+863593_selecao	469229475	O(n²)	50	1376
