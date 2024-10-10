@@ -1,0 +1,2 @@
+Matrícula	Tempo	BigO	Valor de Movimentações	Valor de Comparações
+863593_insercao	656656742	O(n²)	642	693
