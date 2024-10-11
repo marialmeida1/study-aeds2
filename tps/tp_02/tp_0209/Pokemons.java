@@ -424,20 +424,35 @@ class Pokemons {
 
     public static int getBigger(int i, int sizeHeap) {
         int sun;
-        if (2 * i == sizeHeap || arrayPokemons.get(2 * i).getHeight() > arrayPokemons.get(2 * i + 1).getHeight()) {
+        comparisons++;
+        comparisons++;
+        comparisons++;
+        if (2 * i == sizeHeap) {
             sun = 2 * i;
-        } else {
+        } else if (arrayPokemons.get(2 * i).getHeight() > arrayPokemons.get(2 * i + 1).getHeight()) {
+            sun = 2 * i;
+        } else if (arrayPokemons.get(2 * i).getHeight() < arrayPokemons.get(2 * i + 1).getHeight()) {
             sun = 2 * i + 1;
+        } else {
+            comparisons++;
+            if (arrayPokemons.get(2 * i).getName().compareTo(arrayPokemons.get(2 * i + 1).getName()) > 0) {
+                sun = 2 * i;
+            } else {
+                sun = 2 * i + 1;
+            }
         }
         return sun;
     }
 
     public static void construct(int sizeHeap) {
-        for (int i = sizeHeap; i > 1
-                && arrayPokemons.get(i).getHeight() > arrayPokemons.get(i / 2).getHeight(); i /= 2) {
+        for (int i = sizeHeap; i > 1; i /= 2) {
             comparisons++;
-            Collections.swap(arrayPokemons, i, i / 2);
-            movements++;
+            if (arrayPokemons.get(i).getHeight() > arrayPokemons.get(i / 2).getHeight() ||
+                    (arrayPokemons.get(i).getHeight() == arrayPokemons.get(i / 2).getHeight() &&
+                            arrayPokemons.get(i).getName().compareTo(arrayPokemons.get(i / 2).getName()) > 0)) {
+                Collections.swap(arrayPokemons, i, i / 2);
+                movements++;
+            }
         }
     }
 
@@ -447,7 +462,9 @@ class Pokemons {
             comparisons++;
             int sun = getBigger(i, sizeHeap);
             comparisons++;
-            if (arrayPokemons.get(i).getHeight() < arrayPokemons.get(sun).getHeight()) {
+            if (arrayPokemons.get(i).getHeight() < arrayPokemons.get(sun).getHeight() ||
+                    (arrayPokemons.get(i).getHeight() == arrayPokemons.get(sun).getHeight() &&
+                            arrayPokemons.get(i).getName().compareTo(arrayPokemons.get(sun).getName()) < 0)) {
                 Collections.swap(arrayPokemons, i, sun);
                 movements++;
                 i = sun;
@@ -463,8 +480,8 @@ class Pokemons {
         tmp.addAll(arrayPokemons);
         arrayPokemons = tmp;
 
-        for (int sizeHeap = 2; sizeHeap <= n; sizeHeap++) { 
-            comparisons++;
+        comparisons++;
+        for (int sizeHeap = 2; sizeHeap <= n; sizeHeap++) {
             construct(sizeHeap);
         }
 
@@ -494,7 +511,8 @@ class Pokemons {
             BufferedWriter writer = new BufferedWriter(new FileWriter(nomeArquivo));
             writer.write("Matrícula" + "\t" + "Tempo" + "\t" + "BigO" + "\t" + "Valor de Movimentações" + "\t"
                     + "Valor de Comparações\n");
-            writer.write(matricula + "\t" + executionTime + "\t" + "O(n*log(n))" + "\t" + movements + "\t" + comparisons);
+            writer.write(
+                    matricula + "\t" + executionTime + "\t" + "O(n*log(n))" + "\t" + movements + "\t" + comparisons);
             writer.close();
         } catch (IOException e) {
             System.out.println("Erro ao escrever no arquivo de log: " + e.getMessage());
