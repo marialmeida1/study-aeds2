@@ -16,7 +16,8 @@ class Pokemons {
     // Variáveis globais
     SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
     public static ArrayList<Pokemons> listPokemons = new ArrayList<Pokemons>();
-    public static ArrayList<Pokemons> arrayPokemos = new ArrayList<Pokemons>();
+    public static ArrayList<Pokemons> arrayPokemons = new ArrayList<Pokemons>();
+    static int n = arrayPokemons.size();
     public static String PATH = "/tmp/pokemon.csv";
     public static int comparisons = 0;
     public static int movements = 0;
@@ -418,49 +419,74 @@ class Pokemons {
     }
 
     public static void generateArray(Pokemons pokemon) {
-        arrayPokemos.add(pokemon);
+        arrayPokemons.add(pokemon);
     }
 
-    public static void construct(int tamHeap){
-        for (int i = tamHeap; i < 1 && arrayPokemos.get(i).getWeight() > arrayPokemos.get(i/2).getWeight(); i /= 2) {
-            Collections.swap(arrayPokemos, i, i/2);
+    public static int getBigger(int i, int sizeHeap) {
+        int sun;
+        if (2 * i == sizeHeap || arrayPokemons.get(2 * i).getHeight() > arrayPokemons.get(2 * i + 1).getHeight()) {
+            sun = 2 * i;
+        } else {
+            sun = 2 * i + 1;
+        }
+        return sun;
+    }
+
+    public static void construct(int sizeHeap) {
+        for (int i = sizeHeap; i > 1
+                && arrayPokemons.get(i).getHeight() > arrayPokemons.get(i / 2).getHeight(); i /= 2) {
+            comparisons++;
+            Collections.swap(arrayPokemons, i, i / 2);
+            movements++;
         }
     }
 
-    public static void reconstruir(int tamHeap){
+    public static void rebuild(int sizeHeap) {
         int i = 1;
-        while (i <= (tamHeap/2)) {
-            
+        while (i <= (sizeHeap / 2)) {
+            comparisons++;
+            int sun = getBigger(i, sizeHeap);
+            comparisons++;
+            if (arrayPokemons.get(i).getHeight() < arrayPokemons.get(sun).getHeight()) {
+                Collections.swap(arrayPokemons, i, sun);
+                movements++;
+                i = sun;
+            } else {
+                break;
+            }
         }
     }
 
     public static void sort() {
-        ArrayList<Pokemons> tmp = new ArrayList<Pokemons>();
-        for (int i = 0; i < arrayPokemos.size(); i++) {
-            tmp.set(i+1, tmp.get(i));
-        }
-        tmp = arrayPokemos;
+        ArrayList<Pokemons> tmp = new ArrayList<>(n + 1);
+        tmp.add(null);
+        tmp.addAll(arrayPokemons);
+        arrayPokemons = tmp;
 
-        for (int tamHeap = 2; tamHeap < arrayPokemos.size(); tamHeap++) {
-            construct(tamHeap);
+        for (int sizeHeap = 2; sizeHeap <= n; sizeHeap++) { 
+            comparisons++;
+            construct(sizeHeap);
         }
 
-        int tamHeap = arrayPokemos.size();
-        while (tamHeap > 1) {
-            Collections.swap(arrayPokemos, 1, tamHeap--);
+        int sizeHeap = n;
+        while (sizeHeap > 1) {
+            comparisons++;
+            Collections.swap(arrayPokemons, 1, sizeHeap--);
+            rebuild(sizeHeap);
         }
-        
+
+        arrayPokemons.remove(0);
     }
 
     public static void printArray() {
-        for (int i = 0; i < arrayPokemos.size(); i++) {
+        for (int i = 0; i < arrayPokemons.size(); i++) {
             comparisons++; // COMPARAÇÕES: são realizadas "n" comparações
-            arrayPokemos.get(i).print();
+            arrayPokemons.get(i).print();
         }
     }
 
     public static void generatorLog(long startTime, long endTime) {
-        String matricula = "863593_selecao";
+        String matricula = "863593_heapsort";
         String nomeArquivo = matricula + "_1.txt";
         long executionTime = endTime - startTime;
 
@@ -468,7 +494,7 @@ class Pokemons {
             BufferedWriter writer = new BufferedWriter(new FileWriter(nomeArquivo));
             writer.write("Matrícula" + "\t" + "Tempo" + "\t" + "BigO" + "\t" + "Valor de Movimentações" + "\t"
                     + "Valor de Comparações\n");
-            writer.write(matricula + "\t" + executionTime + "\t" + "O(n²)" + "\t" + movements + "\t" + comparisons);
+            writer.write(matricula + "\t" + executionTime + "\t" + "O(n*log(n))" + "\t" + movements + "\t" + comparisons);
             writer.close();
         } catch (IOException e) {
             System.out.println("Erro ao escrever no arquivo de log: " + e.getMessage());
@@ -502,7 +528,8 @@ class Pokemons {
 
         input.close();
 
-        selection();
+        n = arrayPokemons.size();
+        sort();
         printArray();
         long endTime = System.nanoTime();
         generatorLog(startTime, endTime);

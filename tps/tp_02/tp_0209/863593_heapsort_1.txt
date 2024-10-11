@@ -1,2 +1,2 @@
 Matrícula	Tempo	BigO	Valor de Movimentações	Valor de Comparações
-863593_selecao	504488025	O(n²)	50	1376
+863593_heapsort	489425220	O(n*log(n))	196	522
