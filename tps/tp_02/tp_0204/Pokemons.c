@@ -389,7 +389,6 @@ Pokemons *findID(int id)
 
 void cloneArray(int id, Pokemons *newArray)
 {
-    int result = 0;
     int j = 0;
     for (int i = 0; listPokemons[i].name[0] != '\0'; i++)
     {
@@ -397,48 +396,41 @@ void cloneArray(int id, Pokemons *newArray)
         {
             {
                 newArray[j++] = listPokemons[i];
-                result = 1;
             }
         }
     }
 }
 
-char *findByName(char *name, Pokemons *newArray)
+char *findByName(char *name, Pokemons *newArray, int size)
 {
     char *results = (char *)malloc(sizeof(char) * MAX_STRING);
     int found = 0;
 
-    for (int i = 0; newArray[i].name[0] != '\0'; i++)
+    for (int i = 0; i < size ; i++)
     {
         if (strcmp(newArray[i].name, name) == 0)
         {
-            {
-                found = 1;
-                break;
-            }
+            found = 1;
+            break;
         }
-
-        if (found)
-        {
-            strcpy(results, "SIM");
-        }
-        else
-        {
-            strcpy(results, "NAO");
-        }
-
-        return results;
     }
+
+    if (found == 1)
+    {
+        strcpy(results, "SIM");
+    }
+    else
+    {
+        strcpy(results, "NAO");
+    }
+    return results;
 }
 
 int main()
 {
-    /*Pokemons pk;
-    read("181,2,Ampharos,Light Pokémon,electric,,\"['Static', 'Plus']\",61.5,1.4,45,0,25/05/1999", &pk);*/
-
     setListPokemons();
     static Pokemons newArray[MAX_CLASS];
-    static Pokemons *results[MAX_CLASS];
+    static char *results[MAX_CLASS];
     char ln[MAX_STRING];
     int i = 0;
     int j = 0;
@@ -461,7 +453,8 @@ int main()
         }
         else if (i == 1)
         {
-            char *result = findByName(ln, newArray);
+            int size = sizeof(newArray) / sizeof(newArray[0]);
+            char *result = findByName(ln, newArray, size);
             results[j] = result;
             j++;
         }
