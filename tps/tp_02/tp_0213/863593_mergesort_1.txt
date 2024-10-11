@@ -1,0 +1,2 @@
+Matrícula	Tempo	BigO	Valor de Movimentações	Valor de Comparações
+863593_mergesort	444701063	O(n*log(n))	586	856
