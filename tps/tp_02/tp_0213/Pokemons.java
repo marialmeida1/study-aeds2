@@ -460,10 +460,10 @@ class Pokemons {
         int j = 0;
         for (int k = left; k <= right; k++) { // CUSTO: n
             if (i < a1.size() && j < a2.size()) {
-                Pokemons pokemonA = a1.get(i);
-                Pokemons pokemonB = a2.get(j);
+                Pokemons pokemonA = a1.get(i); // Pega o valor na posição i
+                Pokemons pokemonB = a2.get(j); // Pega o valor na posição j
                 comparisons++; // COMPARAÇÃO: entre pokémons
-                int compare = comparePokemons(pokemonA, pokemonB);
+                int compare = comparePokemons(pokemonA, pokemonB); // Realiza as comparações de acordo com os requisitos
 
                 if (compare <= 0) {
                     arrayPokemons.set(k, pokemonA);
@@ -486,12 +486,12 @@ class Pokemons {
 
     private static int comparePokemons(Pokemons p1, Pokemons p2) {
         comparisons++; // COMPARAÇÃO: tipos
-        int typeComparison = p1.getTypes().get(0).compareTo(p2.getTypes().get(0));
+        int typeComparison = p1.getTypes().get(0).compareTo(p2.getTypes().get(0)); // Primeiro por type
         if (typeComparison != 0) {
             return typeComparison;
         } else {
             comparisons++; // COMPARAÇÃO: nomes
-            return p1.getName().compareTo(p2.getName());
+            return p1.getName().compareTo(p2.getName()); // Depois por name
         }
     }
 
