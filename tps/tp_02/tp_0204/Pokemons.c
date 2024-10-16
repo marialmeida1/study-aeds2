@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <time.h>
 
 // Variáveis globais
 #define MAX_STRING 1024
@@ -332,6 +333,7 @@ void read(char *line, Pokemons *pokemons)
 // Variáveis globais
 static Pokemons listPokemons[MAX_CLASS];
 static char PATH[] = "/tmp/pokemon.csv";
+static int comparisons = 0;
 /*
  * ======================================================
  * MÉTODOS DE INTERAÇÃO DOS DADOS
@@ -387,17 +389,50 @@ Pokemons *findID(int id)
     return NULL;
 }
 
-void cloneArray(int id, Pokemons *newArray)
+void cloneArray(int id, Pokemons *newArray, int *pos)
 {
-    int j = 0;
     for (int i = 0; listPokemons[i].name[0] != '\0'; i++)
     {
         if (listPokemons[i].id == id)
         {
-            {
-                newArray[j++] = listPokemons[i];
-            }
+            newArray[*(pos)] = listPokemons[i];
         }
+    }
+}
+
+void swap(Pokemons *a, Pokemons *b)
+{
+    Pokemons temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+int partition(Pokemons arr[], int low, int high)
+{
+    Pokemons pivot = arr[high];
+    int i = (low - 1);
+
+    for (int j = low; j < high; j++)
+    {
+        comparisons++;
+        if (strcmp(arr[j].name, pivot.name) <= 0)
+        {
+            i++;
+            swap(&arr[i], &arr[j]);
+        }
+    }
+    swap(&arr[i + 1], &arr[high]);
+    return (i + 1);
+}
+
+void quickSort(Pokemons arr[], int low, int high)
+{
+    if (low < high)
+    {
+        int pi = partition(arr, low, high);
+
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
     }
 }
 
@@ -406,12 +441,30 @@ char *findByName(char *name, Pokemons *newArray, int size)
     char *results = (char *)malloc(sizeof(char) * MAX_STRING);
     int found = 0;
 
-    for (int i = 0; i < size ; i++)
+    if (strcmp(name, "FIM") != 0)
     {
-        if (strcmp(newArray[i].name, name) == 0)
+        int low = 0;
+        int high = size - 1;
+
+        while (low <= high)
         {
-            found = 1;
-            break;
+            int mid = low + (high - low) / 2;
+
+            comparisons++;
+            int cmp = strcmp(newArray[mid].name, name);
+            if (cmp == 0)
+            {
+                found = 1;
+                break;
+            }
+            else if (cmp < 0)
+            {
+                low = mid + 1;
+            }
+            else
+            {
+                high = mid - 1;
+            }
         }
     }
 
@@ -426,16 +479,39 @@ char *findByName(char *name, Pokemons *newArray, int size)
     return results;
 }
 
+void generatorLog(long executionTime)
+{
+    char matricula[] = "863593";
+    char nomeArquivo[20];
+    snprintf(nomeArquivo, sizeof(nomeArquivo), "%s_1.txt", matricula);
+
+    FILE *file = fopen(nomeArquivo, "w");
+    if (file == NULL)
+    {
+        printf("Erro ao abrir o arquivo de log: %s\n", nomeArquivo);
+        return;
+    }
+
+    fprintf(file, "Matrícula\tTempo\tBigO\tValor de Comparações\n");
+    fprintf(file, "%s\t%ld\tO(n * log(n))\t%d\n", matricula, executionTime, comparisons);
+    fclose(file);
+}
+
 int main()
 {
+    struct timespec start, end;
+    clock_gettime(CLOCK_MONOTONIC, &start);
     setListPokemons();
-    static Pokemons newArray[MAX_CLASS];
-    static char *results[MAX_CLASS];
+    Pokemons newArray[MAX_CLASS];
+    char *results[MAX_CLASS];
     char ln[MAX_STRING];
     int i = 0;
     int j = 0;
+    int pos = 0;
 
-    while (fgets(ln, sizeof(MAX_STRING), stdin))
+    scanf("%s", ln);
+
+    while (i <= 2)
     {
         ln[strcspn(ln, "\n")] = 0;
         if (strcmp(ln, "FIM") == 0)
@@ -446,24 +522,31 @@ int main()
                 break; // Sai do loop se "FIM" foi digitado duas vezes
             }
         }
+
         if (i == 0)
         {
             int id = atoi(ln);
-            cloneArray(id, newArray);
+            cloneArray(id, newArray, &pos);
+            pos++;
         }
         else if (i == 1)
         {
-            int size = sizeof(newArray) / sizeof(newArray[0]);
-            char *result = findByName(ln, newArray, size);
+            quickSort(newArray, 0, pos);
+            char *result = findByName(ln, newArray, pos);
             results[j] = result;
             j++;
         }
+        scanf("%s", ln);
     }
 
-    for (int i = 0; results[i] != NULL; i++)
+    for (int i = 1; results[i] != NULL; i++)
     {
         printf("%s\n", results[i]);
     }
+
+    clock_gettime(CLOCK_MONOTONIC, &end);
+    long elapsedTime = (end.tv_sec - start.tv_sec) * 1e9 + (end.tv_nsec - start.tv_nsec);
+    generatorLog(elapsedTime);
 
     return 0;
 }

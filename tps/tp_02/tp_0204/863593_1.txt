@@ -1,0 +1,2 @@
+Matrícula	Tempo	BigO	Valor de Comparações
+863593	22032778	O(n)	33628
