@@ -1,0 +1,2 @@
+Matrícula	Tempo	BigO	Valor de Comparações	Valor de Movimentações
+863593_bubble	14661625	O(n²)	0	0
