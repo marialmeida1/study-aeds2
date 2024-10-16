@@ -1,0 +1,2 @@
+Matrícula	Tempo	BigO	Valor de Comparações	Valor de Movimentações
+863593	13147133	O(n²))	1275	50

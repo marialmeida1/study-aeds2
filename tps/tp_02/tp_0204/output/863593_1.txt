@@ -1,2 +1,2 @@
 Matrícula	Tempo	BigO	Valor de Comparações
-863593	11459896	O(n * log(n))	0
+863593	115829213518	O(n * log(n))	0
