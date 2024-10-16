@@ -1,2 +1,2 @@
 Matrícula	Tempo	BigO	Valor de Comparações	Valor de Movimentações
-863593	9189405	O(n²))	1275	50
+863593_shellsort	12184393	O(n * log(n)))	146	331
