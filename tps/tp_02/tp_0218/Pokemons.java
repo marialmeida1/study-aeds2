@@ -7,9 +7,7 @@ import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -433,28 +431,32 @@ class Pokemons {
             return;
         }
 
-        // Se a quantidade de elementos a ser ordenada for menor ou igual a 10, não
-        // ordenamos mais
-        if ((right - left + 1) <= 30) {
-            return;
-        }
-
         int i = left, j = right;
-        int pivot = arrayPokemons.get((left + right) / 2).getGeneration();
+        Pokemons pivot = arrayPokemons.get((left + right) / 2);
 
         while (i <= j) {
-            while (arrayPokemons.get(i).getGeneration() < pivot) {
-                comparisons++; // COMPARAÇÃO: para ver se é menor que o pivô
+            // Comparação para encontrar valores menores que o pivô (primeiro por geração,
+            // depois por nome)
+            while (arrayPokemons.get(i).getGeneration() < pivot.getGeneration() ||
+                    (arrayPokemons.get(i).getGeneration() == pivot.getGeneration() &&
+                            arrayPokemons.get(i).getName().compareTo(pivot.getName()) < 0)) {
+                comparisons++;
                 i++;
             }
-            while (arrayPokemons.get(j).getGeneration() > pivot) {
-                comparisons++; // COMPARAÇÃO: para ver se é maior que o pivô
+
+            // Comparação para encontrar valores maiores que o pivô (primeiro por geração,
+            // depois por nome)
+            while (arrayPokemons.get(j).getGeneration() > pivot.getGeneration() ||
+                    (arrayPokemons.get(j).getGeneration() == pivot.getGeneration() &&
+                            arrayPokemons.get(j).getName().compareTo(pivot.getName()) > 0)) {
+                comparisons++;
                 j--;
             }
 
+            // Troca os elementos se necessário
             if (i <= j) {
                 Collections.swap(arrayPokemons, i, j);
-                movements++; // MOVIMENTAÇÃO: (swap) dos elementos
+                movements++;
                 i++;
                 j--;
             }

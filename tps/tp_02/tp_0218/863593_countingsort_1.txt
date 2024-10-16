@@ -1,2 +1,0 @@
-Matrícula	Tempo	BigO	Valor de Movimentações	Valor de Comparações
-863593_countingsort	449599769	O(n*log(n))	0	10
