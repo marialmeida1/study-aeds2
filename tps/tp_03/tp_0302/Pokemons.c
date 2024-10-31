@@ -6,7 +6,7 @@
 // Variáveis globais
 #define MAX_STRING 1024
 #define MAX_LIST 10
-#define MAX_LIST_CLASS 10
+#define MAX_LIST_CLASS 100
 #define MAX_CLASS 1000
 
 // Estruturas de struct
@@ -40,6 +40,12 @@ typedef struct // "Classe" Pokemons
     Date captureDate;
 } Pokemons;
 
+typedef struct // "Classe" Lista para Classe
+{
+    int n;
+    Pokemons element[MAX_LIST_CLASS];
+} ListPokemons;
+
 // ====== GERENCIAMENTO DA LISTA ATRIBUTOS ======
 // Inciar lista
 void initList(List *list)
@@ -66,11 +72,6 @@ int insertList(List *list, char *el)
     }
     return 0;
 }
-
-
-// ====== GERENCIAMENTO DA LISTA ATRIBUTOS ======
-
-
 
 // Mostra elementos da lista
 void showList(List *list)
@@ -335,6 +336,141 @@ void read(char *line, Pokemons *pokemons)
     pokemons->captureDate = date;
 }
 
+// ====== GERENCIAMENTO DA LISTA CLASSE ======
+void init(ListPokemons *list)
+{
+    list->n = 0;
+}
+
+void inserirInicio(ListPokemons *list, Pokemons x)
+{
+    int i;
+
+    // validar insercao
+    if (list->n >= MAX_LIST_CLASS)
+    {
+        printf("Erro ao inserir!");
+        exit(1);
+    }
+
+    // levar elementos para o fim do array
+    for (i = list->n; i > 0; i--)
+    {
+        list->element[i] = list->element[i - 1];
+    }
+
+    list->element[0] = x;
+    list->n++;
+}
+
+void inserirFim(ListPokemons *list, Pokemons x)
+{
+
+    // validar insercao
+    if (list->n >= MAX_LIST_CLASS)
+    {
+        printf("Erro ao inserir!");
+        exit(1);
+    }
+
+    list->element[list->n] = x;
+    list->n++;
+}
+
+void inserir(ListPokemons *list, Pokemons x, int pos)
+{
+    int i;
+
+    // validar insercao
+    if (list->n >= MAX_LIST_CLASS || pos < 0 || pos > list->n)
+    {
+        printf("Erro ao inserir!");
+        exit(1);
+    }
+
+    // levar elementos para o fim do array
+    for (i = list->n; i > pos; i--)
+    {
+        list->element[i] = list->element[i - 1];
+    }
+
+    list->element[pos] = x;
+    list->n++;
+}
+
+Pokemons removerInicio(ListPokemons *list)
+{
+    int i;
+    Pokemons resp;
+
+    // validar remocao
+    if (list->n == 0)
+    {
+        printf("Erro ao remover!");
+        exit(1);
+    }
+
+    resp = list->element[0];
+    list->n--;
+
+    for (i = 0; i < list->n; i++)
+    {
+        list->element[i] = list->element[i + 1];
+    }
+
+    return resp;
+}
+
+Pokemons removerFim(ListPokemons *list)
+{
+
+    // validar remocao
+    if (list->n == 0)
+    {
+        printf("Erro ao remover!");
+        exit(1);
+    }
+
+    return list->element[--(list->n)];
+}
+
+Pokemons remover(ListPokemons *list, int pos)
+{
+    int i;
+    Pokemons resp;
+
+    // validar remocao
+    if (list->n == 0 || pos < 0 || pos >= list->n)
+    {
+        printf("Erro ao remover!");
+        exit(1);
+    }
+
+    resp = list->element[pos];
+    list->n--;
+
+    for (i = pos; i < list->n; i++)
+    {
+        list->element[i] = list->element[i + 1];
+    }
+
+    return resp;
+}
+
+void mostrar(ListPokemons *list)
+{
+    int i;
+
+    printf("[ ");
+
+    for (i = 0; i < list->n; i++)
+    {
+        print(&list->element[i]);
+    }
+
+    printf("]\n");
+}
+
 // Variáveis globais
 static Pokemons listPokemons[MAX_CLASS];
 static char PATH[] = "/tmp/pokemon.csv";
@@ -400,6 +536,7 @@ int main()
 
     setListPokemons();
     char ln[MAX_STRING];
+    ListPokemons pokemonsInsert;
 
     while (fgets(ln, sizeof(MAX_STRING), stdin))
     {
@@ -413,12 +550,60 @@ int main()
         Pokemons *pokemon = findID(id);
         if (pokemon != NULL)
         {
-            print(pokemon);
+            inserirFim(&pokemonsInsert, *pokemon);
         }
         else
         {
             printf("Pokemon não encontrado!\n");
         }
     }
+
+    int qtd = 0;
+    scanf("%d", &qtd);
+    char str_cmd[MAX_STRING];
+
+    for (int i = 0; i < qtd; i++)
+    {
+        char *parts[3];
+        Pokemons *pk_find = NULL;
+        char *cmd = NULL : int id = 0, pos = 0;
+
+        fgets(str_cmd, MAX_INPUT, stdin);
+        str_cmd[strcspn(str_cmd, "\n")] = 0;
+
+        parts[0] = strtok(str_cmd, " ");
+        parts[1] = strtok(NULL, " ");
+        parts[2] = strtok(NULL, " ");
+
+        if (parts[0] != NULL)
+        {
+            cmd = parts[0];
+        }
+
+        if (parts[2] != NULL)
+        {
+            pos = atoi(parts[1]);
+            id = atoi(parts[2]);
+            pk_find = findID(id, listPokemons, listSize);
+        }
+        else if (parts[1] != NULL)
+        {
+            id = atoi(parts[1]);
+            pk_find = findID(id, listPokemons, listSize);
+        }
+
+
+        switch (cmd)
+        {
+        case "II":
+            
+            break;
+        
+        default:
+            break;
+        }
+    }
+
+    mostrar(&pokemonsInsert);
     return 0;
 }

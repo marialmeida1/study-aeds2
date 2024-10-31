@@ -453,17 +453,19 @@ public class Pokemons {
                 pk_find = findID(id, listPokemons);
             } else if (parts.length >= 2) {
                 cmd = parts[0];
-                id = Integer.parseInt(parts[1]);
-                pk_find = findID(id, listPokemons);
+                if (cmd.equals("R*")) {
+                    pos = Integer.parseInt(parts[1]);
+                } else {
+                    id = Integer.parseInt(parts[1]);
+                    pk_find = findID(id, listPokemons);
+                }
             } else {
                 cmd = parts[0];
             }
 
             switch (cmd) {
                 case "II":
-                    if (pk_find != null) {
-                        pokemonsInsert.inserirInicio(pk_find);
-                    }
+                    pokemonsInsert.inserirInicio(pk_find);
                     break;
 
                 case "I*":
@@ -550,7 +552,7 @@ class Lista {
             throw new Exception("Erro ao inserir!");
         }
 
-        for (int i = 0; i > pos; i--) {
+        for (int i = n; i > pos; i--) {
             array[i] = array[i - 1];
         }
 
@@ -564,12 +566,12 @@ class Lista {
         }
 
         Pokemons resp = array[0];
-        n--;
 
         for (int i = 0; i < n; i++) {
             array[i] = array[i + 1];
         }
 
+        n--;
         return resp;
     }
 
@@ -578,10 +580,7 @@ class Lista {
             throw new Exception("Erro ao remover!");
         }
 
-        Pokemons resp = array[--n]; 
-        array[n] = null;
-        resp.print();
-        return resp;
+        return array[--n];
     }
 
     public Pokemons remover(int pos) throws Exception {
@@ -603,7 +602,7 @@ class Lista {
 
     public void mostrar() {
         for (int i = 0; i < n; i++) {
-            System.out.print("[" + i + "]");
+            System.out.print("[" + i + "] ");
             array[i].print();
         }
     }
