@@ -128,3 +128,25 @@ public void mostrar() {
     }
     System.out.println(']');
 }
+```
+
+### Fila
+
+Possui uma classe dessa vez com dois ponteiros, um para a primeira e outro para a última posição. Primeiro é no cabeça, não tem valor válido
+
+Inserir - altera o último de posição
+Remover - altera o primeiro de posição
+
+Inserir: 
+
+ultimo.prox recebe uma nova célula com o valor passado por parâmetro
+referencia o último como a nova célula criada
+
+Remoção:
+
+verifica se primeiro e ultimo não são iguais
+Cria celula temporária que referencia o primeiro
+o primeiro será o próximo
+salva o valor do elemento deletado que é o priemiro.prox pq o primeiro primeiro é no cabeça
+coloca tmp como null
+retonrna elemento
