@@ -488,11 +488,7 @@ public class Pokemons {
 
                 case "RF":
                     Pokemons pkRF = pokemonsInsert.removerFim();
-                    if (pkRF == null) {
-                        System.out.println("Deus mim odeia");
-                    } else {
-                        System.out.println("(R) " + pkRF.getName());
-                    }
+                    System.out.println("(R) " + pkRF.getName());
                     break;
 
                 default:

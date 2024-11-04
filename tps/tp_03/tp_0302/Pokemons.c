@@ -431,7 +431,9 @@ Pokemons removerFim(ListPokemons *list)
         exit(1);
     }
 
-    return list->element[--(list->n)];
+    list->n--;                                       // Decrementa primeiro
+    Pokemons ultimoPokemon = list->element[list->n]; // Armazena o Pokémon removido
+    return ultimoPokemon;
 }
 
 Pokemons remover(ListPokemons *list, int pos)
@@ -439,21 +441,22 @@ Pokemons remover(ListPokemons *list, int pos)
     int i;
     Pokemons resp;
 
-    // validar remocao
     if (list->n == 0 || pos < 0 || pos >= list->n)
     {
-        printf("Erro ao remover!");
+        printf("Erro ao remover!\n");
         exit(1);
     }
 
     resp = list->element[pos];
-    list->n--;
 
-    for (i = pos; i < list->n; i++)
+    for (i = pos; i < list->n - 1; i++)
     {
         list->element[i] = list->element[i + 1];
     }
 
+    strcpy(list->element[list->n - 1].name, "");
+    list->element[list->n - 1].id = 0;
+    list->n--;
     return resp;
 }
 
@@ -461,14 +464,11 @@ void mostrar(ListPokemons *list)
 {
     int i;
 
-    printf("[ ");
-
     for (i = 0; i < list->n; i++)
     {
+        printf("[%d] ", i);
         print(&list->element[i]);
     }
-
-    printf("]\n");
 }
 
 // Variáveis globais
@@ -562,13 +562,14 @@ int main()
     scanf("%d", &qtd);
     char str_cmd[MAX_STRING];
 
-    for (int i = 0; i < qtd; i++)
+    for (int i = 0; i <= qtd; i++)
     {
         char *parts[3];
         Pokemons *pk_find = NULL;
-        char *cmd = NULL : int id = 0, pos = 0;
+        char *cmd = NULL;
+        int id = 0, pos = 0;
 
-        fgets(str_cmd, MAX_INPUT, stdin);
+        fgets(str_cmd, MAX_STRING, stdin);
         str_cmd[strcspn(str_cmd, "\n")] = 0;
 
         parts[0] = strtok(str_cmd, " ");
@@ -584,23 +585,56 @@ int main()
         {
             pos = atoi(parts[1]);
             id = atoi(parts[2]);
-            pk_find = findID(id, listPokemons, listSize);
+            pk_find = findID(id);
         }
         else if (parts[1] != NULL)
         {
-            id = atoi(parts[1]);
-            pk_find = findID(id, listPokemons, listSize);
+
+            if (strcmp(cmd, "R*") == 0)
+            {
+                pos = atoi(parts[1]);
+            }
+            else
+            {
+                id = atoi(parts[1]);
+                pk_find = findID(id);
+            }
         }
 
-
-        switch (cmd)
+        // Switch Case (IF)
+        if (cmd != NULL)
         {
-        case "II":
-            
-            break;
-        
-        default:
-            break;
+            if (strcmp(cmd, "II") == 0)
+            {
+                inserirInicio(&pokemonsInsert, *pk_find);
+            }
+            else if (strcmp(cmd, "I*") == 0)
+            {
+                inserir(&pokemonsInsert, *pk_find, pos);
+            }
+            else if (strcmp(cmd, "IF") == 0)
+            {
+                inserirFim(&pokemonsInsert, *pk_find);
+            }
+            else if (strcmp(cmd, "RI") == 0)
+            {
+                Pokemons pkRI = removerInicio(&pokemonsInsert);
+                printf("(R) %s\n", pkRI.name);
+            }
+            else if (strcmp(cmd, "R*") == 0)
+            {
+                Pokemons pkR = remover(&pokemonsInsert, pos);
+                printf("(R) %s\n", pkR.name);
+            }
+            else if (strcmp(cmd, "RF") == 0)
+            {
+                Pokemons pkRF = removerFim(&pokemonsInsert);
+                printf("(R) %s\n", pkRF.name);
+            }
+            else
+            {
+                printf("Comando não reconhecido.\n");
+            }
         }
     }
 
