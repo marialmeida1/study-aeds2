@@ -1,0 +1,9 @@
+# Controle de Voo
+
+O aeroporto de Congonhas recebe em média 600 pousos e decolagens por dia, ou cerca de 36 por hora. No último ano, foram exatamente 223.989 movimentos aéreos. Para organizar todo o fluxo de aviões que chegam em Congonhas e saem de lá, a torre de controle opera o tempo todo com a máxima atenção. Para afastar qualquer possibilidade de erro humano, o chefe do controle de tráfego aéreo de Congonhas contratou você para desenvolver um programa que organiza automaticamente o fluxo de aviões no aeródromo. Para isso, basta seguir o seguinte protocolo, os aviões que vêm do lado oeste da pista têm maior prioridade de serem colocados na fila, pois são os que estão mais próximos do localizador (início da pista). Os aviões que estão se aproximando do lado Norte e Sul, por sua vez, devem ser inseridos na fileira 1 de cada vez, ou seja, 1 avião é inserido no lado Norte e depois 1 avião no lado Sul. Por fim, o próximo avião que se aproxima do lado leste da pista.
+
+## Entrada
+A entrada consiste em um inteiro P, representando o ponto cardeal do avião que entrou no campo da pista (-4 <= P <= -1), onde (-4 representa o lado leste, -3 o lado norte, -2 o lado sul e -1 o lado oeste). Em seguida, os respectivos aviões são inseridos, compostos por um identificador iniciado pela letra “A” seguido de um inteiro I (1 <= I <= 1000). A qualquer momento é permitido alterar o ponto cardeal, e inserir novas aeronaves, repetidamente até que o controlador encerre a sessão com o dígito 0.
+
+## Saída
+A saída consiste em uma linha contendo as aeronaves alinhadas na ordem do protocolo estabelecido pelo aeroporto.
