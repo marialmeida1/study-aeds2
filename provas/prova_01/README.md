@@ -1,4 +1,4 @@
-# Prova de Algoritimos e Estrutura de Dados 2
+# Prova de Algoritimos e Estrutura de Dados 2 - Prova 01
 
 1. [Contando operações](#contando-operações)
     - [Como expressar os resultados](#como-expressar-os-resultados)
