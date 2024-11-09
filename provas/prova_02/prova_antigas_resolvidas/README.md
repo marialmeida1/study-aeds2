@@ -11,11 +11,11 @@ Abaixo, é apresentada a estrutura do código e uma ilustração que mostra a li
 
 A questão referência a utilização de uma lista como maneira de criar e organizar uma estrutura de meiose. O conceito de `meiose` trata-se de uma repartição uma única célula em duas, nesse caso, o valor presente dentro de uma célula pai, como a exemplo, o valor `8`, se tornará `4` em duas células distintas (filhas). Segue o exemplo na imagem abaixo:
 
-![Meiose](image.png)
+![Meiose](./img/image.png)
 
 Nota-se que as duas células criadas deverão ser conectadas, para que assim a estrutura não perca sua sequencia como uma lista encadeada flexível. O exemplo abaixo demostra como funcionará de modo amplo essa meiose:
 
-![alt text](image-2.png)
+![alt text](./img/image-2.png)
 
 ### Construção da Lógica
 
@@ -35,11 +35,11 @@ Primeiramente, iremos realizar estrutura de repetição que irá percorrer essa 
 
 Identificando a célula atual que estamos podemos criar uma nova célula por meio do método `malloc` da linguagem C. Essa nova célula irá receber em seu parametro `elemento` o valor do `elemento` da célula atual divido por dois. Desse modo, a célula atual fará o mesmo processo de atribuição de valores. 
 
-![alt text](image-3.png)
+![alt text](./img/image-3.png)
 
 Posteriormente, iremos redefinir os ponteiros. Esse processo se assemelha muito ao método de inserção em qualquer posição, visto que criará uma célula nova que receberá em seu parametro `prox` o mesmo valor da célula atual. Já a célula atual receberá em seu parametro `prox` a nova célula criada.
 
-![alt text](image-4.png)
+![alt text](./img/image-4.png)
 
 Por fim, temos que definir para aonde a célula atual irá apontar, que nesse caso, deverá ser duas posições posteriores visto que foi criado uma nova célula no meio. Assim, célula atual irá receber para aonde a nova célula aponta.
 
@@ -97,12 +97,12 @@ Quando encotrado um valor igual, iremos realizar uma nova etapa, que nesse caso 
 
 Cada nó da árvore apresenta três valores importantes, sendo eles, o `elemento` e dois ponteiros, uma para `esquerda` e um para a `direita`, como demonstrado na imagem abaixo:
 
-![alt text](image-5.png)
+![alt text](./img/image-5.png)
 
 
 Para a resolução do problema iremos criar um novo valor, sendo ele chamado `quantidade`. Desse modo, cada célula terá um valor que definirá a quantidade de vezes repetidas em que o valor presente no nó apareceu. Segue a imagem demostrada abaixo:
 
-![alt text](image-6.png)
+![alt text](./img/image-6.png)
 
 ##### Construção da Lógica - Célula Nó Árvore - Código
 
