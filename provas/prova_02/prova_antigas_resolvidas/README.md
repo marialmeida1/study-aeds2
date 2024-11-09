@@ -4,10 +4,8 @@
 
 ### Enunciado
 
-*Dada uma lista simplesmente encadeada, implemente a função void meiose(). Esta função deve percorrer toda
-a lista, dividindo cada célula em duas, com cada nova célula contendo a metade do valor da célula original.
-Abaixo, é apresentada a estrutura do código e uma ilustração que mostra a lista antes e após a operação.
-Apresente a complexidade do código em função de theta.*
+*Dada uma lista simplesmente encadeada, implemente a função void meiose(). Esta função deve percorrer toda a lista, dividindo cada célula em duas, com cada nova célula contendo a metade do valor da célula original.
+Abaixo, é apresentada a estrutura do código e uma ilustração que mostra a lista antes e após a operação. Apresente a complexidade do código em função de theta.*
 
 ### Interpretação
 
@@ -60,6 +58,102 @@ void meiose() {
 
         atual = novaCelula->prox; // Localização: atual célula
     }
+}
+```
+
+### Complexidade do Algorítimo 
+
+Sua complexidade será `theta de n` visto que terá que percorrer todas as posições da lista para definir novos valores da meiose. 
+
+Obs: importante ressaltar que seu valor é sempre `theta de n` pois, mesmo dobrando o valor da lista o valores percorridos pelo while continuam sendo somente a quantidade de `n`.
+
+## Questão 02 - Árvore Binária de Busca em Java
+
+### Enunciado 
+
+*Considere a implementação de uma árvore binária de busca (BST) em que os nós armazenam números inteiros. Na BST vista em sala de aula, não eram aceitos elementos repetidos. Para este exercício, você
+deve modificar a BST para que, ao inserir um número já existente, em vez de ignorar a inserção, a árvore armazene a quantidade de vezes que cada número foi inserido. Você deve implementar o método void inserir(int x). Você pode modificar os atributos da árvore. Apresente a complexidade do código em função de theta.*
+
+### Interpretação
+
+Em uma árvore binária, por padrão, evitamos de inserir valores iguais, para que assim métodos como inserção, pesquisa, remoção e dentre outros não tenham seu desempenho projudicado. 
+
+Desse modo, esse exercício propoẽm uma forma de "driblar" essa problemática, fazendo com que, cada vez que seja identificado um elemento igual, tenha uma variável que possa armazernar quantas vezes esse elemento está repetido. 
+
+### Contrução da Lógica
+
+No estudo de árvores binárias temos uma sequência extremamente conhecida, que será detalhada abaixo:
+
+- **raiz nula: ** insere um novo nó na árvores
+- **se não -> menor: ** caminha para a esquerda
+- **se não -> maior: ** caminha para a direita
+- **se não -> igual: ** retorna falso, não insere ...
+
+O último passo, que ocorre quando nenhuma resposta acima foi validada siginifica que encontramos uma valor no qual já existe dentro da nossa árvore binária. Por padrão a resposta seria falsa e o noso método retornaria erro, mas é justamente isso que esse exercício evita.
+
+Quando encotrado um valor igual, iremos realizar uma nova etapa, que nesse caso é inserir um contador que define quantas vezes esse valor está repetido. Entretanto, como esse contador será definido?
+
+#### Construção da Lógica - Célula Nó Árvore
+
+Cada nó da árvore apresenta três valores importantes, sendo eles, o `elemento` e dois ponteiros, uma para `esquerda` e um para a `direita`, como demonstrado na imagem abaixo:
+
+![alt text](image-5.png)
+
+
+Para a resolução do problema iremos criar um novo valor, sendo ele chamado `quantidade`. Desse modo, cada célula terá um valor que definirá a quantidade de vezes repetidas em que o valor presente no nó apareceu. Segue a imagem demostrada abaixo:
+
+![alt text](image-6.png)
+
+##### Construção da Lógica - Célula Nó Árvore - Código
+
+```java
+class No {
+    public int el;
+    public int qtd;
+    public No esq, dir;
+
+    public No(int el){
+        this.el = el;
+        this.qtd = 0; // Como não há elementos repetidos a princípio ele começa com o valor zerado
+    }
+}
+```
+
+#### Construção da Lógica - Método inserir
+
+Como pedido pelo enunciado deve-se criar uma método com a seguinte assinatura:
+
+```java
+public void inserir(int x){...}
+```
+
+Esse método fará a chamada do nosso método recursivo de inserir, que irá receber dois parâmetros, como segue a assinatura do método abaixo:
+
+```java
+private void inserir(No no, int x){...}
+```
+
+O método acima segue uma estrutura muito semelhante a ordem anterior sobre inserção, pesquisa, remoção em árvores binárias. Ele irá seguir uma estrutura condicional até encontrar um elemento igual, se houver. Portanto, as três etapas iniciais do método seguem a mesma estrutura de um método de inserção padrão, entretanto, no momento que encontrar um elemento igual, ele fará um incremento no parametro do nó `qtd (quantidade)`.
+
+
+##### Construção da Lógica - Método inserir - Código
+
+```java
+public void inserir(int x){
+    inserir(raiz, x);
+}
+
+private void inserir(No no, int x){
+    if(no == null){ // Se: null
+        return new No(x);
+    } else if(x < no.el){ // Se não: menor -> esquerda
+        no.esq = inserir(no.esq, x);
+    } else if(x > no.el){ // Se não: maior -> direita
+        no.dir = inserir(no.dir, x);
+    } else { // Se não: igual -> incremento
+        no.qtd++;
+    }
+    return no;
 }
 ```
 
