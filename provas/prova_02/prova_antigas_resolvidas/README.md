@@ -17,7 +17,7 @@ Nota-se que as duas células criadas deverão ser conectadas, para que assim a e
 
 ![alt text](image-2.png)
 
-### Construção da Lógica e Código
+### Construção da Lógica
 
 A construção do código pode ser realizada de diversos modos, podendo utilizar da lista já feita e adicionando novas células ou criando uma nova lista. O modo impletado abaixo utiliza da lista já existente, funcionando em 5 (cinco) etapas principais:
 
@@ -84,12 +84,12 @@ Desse modo, esse exercício propoẽm uma forma de "driblar" essa problemática,
 
 No estudo de árvores binárias temos uma sequência extremamente conhecida, que será detalhada abaixo:
 
-- **raiz nula: ** insere um novo nó na árvores
-- **se não -> menor: ** caminha para a esquerda
-- **se não -> maior: ** caminha para a direita
-- **se não -> igual: ** retorna falso, não insere ...
+- **raiz nula:** insere um novo nó na árvores
+- **se não -> menor:** caminha para a esquerda
+- **se não -> maior:** caminha para a direita
+- **se não -> igual:** retorna falso, não insere ...
 
-O último passo, que ocorre quando nenhuma resposta acima foi validada siginifica que encontramos uma valor no qual já existe dentro da nossa árvore binária. Por padrão a resposta seria falsa e o noso método retornaria erro, mas é justamente isso que esse exercício evita.
+O último passo, que ocorre quando nenhuma resposta acima foi validada siginifica que encontramos uma valor no qual já existe dentro da nossa árvore binária. Por padrão a resposta seria falsa e o nosso método retornaria erro, mas é justamente isso que esse exercício evita.
 
 Quando encotrado um valor igual, iremos realizar uma nova etapa, que nesse caso é inserir um contador que define quantas vezes esse valor está repetido. Entretanto, como esse contador será definido?
 
@@ -156,5 +156,10 @@ private void inserir(No no, int x){
     return no;
 }
 ```
+### Complexidade do Algorítimo 
 
+Como a alteração do código não traz efeitos diretos na pesquisa ou inserção de elementos o método mantém o mesmo custo de complexidade que o método de inserção padrão, sendo seus piores e melhores casos detalhados abaixo:
+
+- **Melhor caso:** árvore balanceada aonde seu custo é `ϴ(log(n))`
+- **Pior caso:** quando árvore não está balanceada ou seu valor esta na última posição `ϴ(n)`.
 
