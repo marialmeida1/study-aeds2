@@ -15,6 +15,8 @@ Dentro do repositório, encontramos algumas pastas principais, sendo elas:
 
 - **tad**: Contém todas as estruturas de dados básicas lineares (TADs).
 
+- **tad_flex**: Contém todas as estruturas de dados básicas flexíveis (TADs).
+
 - **tps**: Inclui todos os **trabalhos práticos** realizados ao longo da disciplina.
 
 ## Linguagens Utilizadas
