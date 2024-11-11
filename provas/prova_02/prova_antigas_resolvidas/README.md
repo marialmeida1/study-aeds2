@@ -163,3 +163,101 @@ Como a alteração do código não traz efeitos diretos na pesquisa ou inserçã
 - **Melhor caso:** árvore balanceada aonde seu custo é `ϴ(log(n))`
 - **Pior caso:** quando árvore não está balanceada ou seu valor esta na última posição `ϴ(n)`.
 
+## Questão 03 - Matriz Flexível, Lista Simples e Dupla em Java
+
+### Enunciado
+
+*Considere a estrutura de classes abaixo, em Java, que representa uma matriz encadeada, onde cada célula da matriz (CelulaMatriz) contém uma lista de células (Celula). A classe Matriz possui um método diagUnificada que precisa ser implementado. Este método deve retornar um ponteiro para uma célula dupla (CelulaDupla) que
+será o ínicio de uma lista duplamente encadeada contendo todas as células da diagonal principal da matriz (uma única lista duplamente encadeada resultado da concatenação de todas as listas da diagonal principal). Considere que as listas da Matriz possuem Célula Cabeça, que devem ser desconsideradas na lista resultante.*
+
+
+### Interpretação 
+
+Toda matriz quadrada (nXn) possuí uma diagonal principal que se refere aos elementos que se encontram posicionados com o mesmo índice de coluna e linha. Segue um exemplo da representação desse conceito:
+
+![alt text](image.png)
+
+O exercício proposto trabalha em cima desse conceito utilizando quatro pontos de estrutura de dados muito importantes, sendo eles:
+
+1. Estruturas híbridas
+2. Matriz flexível
+3. Lista simples flexível
+4. Lista dupla flexível
+
+No exercício apresentado temos uma matriz flexível híbrida, na qual cada célula presente nela possuí a ligação com uma lista flexível simples. Assim, toda vez acesarmos uma célula dessa matriz, iremos ter a possíbilidade de acessar diversas outras células dessa vez da lista armazenada. Segue uma representação visual:
+
+![alt text](image-1.png)
+
+Entretanto, aonde o exercício deseja atingir?
+
+### Contrução da Lógica
+
+Até o momento trabalhamos com alguns conceitos importantes, sendo eles a diagonal principal e as estruturas de dados apresentadas na tarefa. O exercício pede nada menos do que, armazenar os valores presente na diagonal principal em uma nova estrutura de dados, que nesse caso será a `lista dupla`. 
+
+Nesse caso, é importante ressaltar que: ao acessar cada célula da diagonal principal temos que também acessar a lista existente dentro dessa célula. Ou seja, nosso passo a passo seria:
+
+1. Etapa que percorre a diagonal principal.
+2. Etapa que acessa a lista simples presente dessa célula acessada anteriormente.
+3. Etapa que armazena esse valor lido dessa lista simples em uma nova estrutura, que é a lista dupla.
+
+
+### Interpretação do Código
+
+O exercício pede claramente a construção de uma método chamado `diagUnificada`, que nesse caso fará a construção da tarefa exemplificada anteriormente. 
+
+O próprio enunciado já oferece a construção das classes das estruturas de dados referenciadas. Seguem abaixo, uma imagem que demonstra essas estruturas que serão utilizadas para a construção do método:
+
+![alt text](image-2.png)
+
+Segue a listagem também, das estruturas que serão usadas:
+
+- **Celula:** usada para construir a lista simples, que está presente dentro de cada célula da matriz. Ela armazena somente um valor e um apontamento para a próxima célula de referência.
+- **CelulaDupla:** usada para construir a nossa nova estrutura de dados que é a `lista dupla`. Ela possuí dessa vez, três valores, sendo eles o `elemento` que armazena uma informação e dois apontadores: uma para a célula posterior e um para a célula anterior.
+- **CelulaMatriz:** a célula matriz é uma outra etapa de construção de estruturas, ela é em si a mais complexa visto que armazena seis valores, sendo eles quatro (4) apontadores para uma outras células de matriz e dois (2) apontadores para armazer células simples da lista flexível simples.
+- **Matriz:** responsável realmente por construir a nossa estrutura de matriz ele armazena três valores principais e é aonde iremos contruir o nosso método. Os valores armazenados são: um apontador para uma célula da matriz indicando o seu ínicio, e valores inteiros que representam sua quantidade linhas e colunas.
+
+
+##### Construção da Lógica - Método digUnificada - Código
+
+```java
+CelulaDupla digUnificada() {
+    if(inicio == null){ // Se o início está vazio é porque não  existe matriz inicializada
+        return null;
+    }
+
+    CelulaMatriz sentinelaMatriz = inicio; // Percorre a matriz
+    CelulaDupla inicioDupla = null; // Cria o início da lista dupla
+    CelulaDupla fimDupla = null; // Cria o fim da lista dupla
+    
+
+    // Percorre a digonal principal da matriz
+    while(sentinelaMatriz != null){
+
+        // SE ATENTE AO `PROX` ele saí da célula cabeça da lista
+        Celula sentinelaCelula = sentinelaMatriz.inicio.prox; // Pega o início da lista que será percorrida na célula identificada
+
+        // Percorre a lista de cada célula
+        while(sentinelaCelula != null){
+            CelulaDupla novaCelula = new Celula(); // Cria uma célula da lista dupla
+            novaCelula.elemento = sentinelaCelula.elemento; // Nova célula recebe seu valor
+            fimDupla.prox = novaCelula; // Conecta as células
+            novaCelula.ant = fimDupla; // Faz conexão com o ponteiro anterior
+            fimDupla = novaCelula; // Altera o fim da lista dupla
+
+            sentinelaCelula = sentinelaCelula.prox; // Aponta para o próximo valor
+        }
+
+        // Se a célula a direita for nula `sentinelaMatriz` será validada como nula e saíra do while externo
+        // Se não for, `sentinelaMatriz` irá receber o valor da célula que está a direita inferior
+        sentinelaMatriz = sentinelaMatriz.dir != null ? sentinelaMatriz.dir.inf : null;
+    }
+}
+```
+
+##### Informações importantes sobre o código
+
+- A lista simples presente dentro de cada célula da matriz apresenta uma `célula cabeça` que é nada mais, do que uma célula que serve de orientação para o início da lista criada. Portanto a linha que refere `Celula sentinelaCelula = sentinelaMatriz.inicio.prox;` deve **NECESSÁRIAMENTE** ter o atributo de referência para o próximo, `prox` para que assim seja ignorado a célula cabeça.
+- A lista dupla dessa vez não apresenta essa característica de ter uma célula cabeça, então não é necessário considerá-la. 
+
+
+
