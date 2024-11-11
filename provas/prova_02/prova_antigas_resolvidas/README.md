@@ -175,7 +175,7 @@ será o ínicio de uma lista duplamente encadeada contendo todas as células da 
 
 Toda matriz quadrada (nXn) possuí uma diagonal principal que se refere aos elementos que se encontram posicionados com o mesmo índice de coluna e linha. Segue um exemplo da representação desse conceito:
 
-![alt text](image.png)
+![alt text](./img/image.png)
 
 O exercício proposto trabalha em cima desse conceito utilizando quatro pontos de estrutura de dados muito importantes, sendo eles:
 
@@ -186,7 +186,7 @@ O exercício proposto trabalha em cima desse conceito utilizando quatro pontos d
 
 No exercício apresentado temos uma matriz flexível híbrida, na qual cada célula presente nela possuí a ligação com uma lista flexível simples. Assim, toda vez acesarmos uma célula dessa matriz, iremos ter a possíbilidade de acessar diversas outras células dessa vez da lista armazenada. Segue uma representação visual:
 
-![alt text](image-1.png)
+![alt text](./img/image-01.png)
 
 Entretanto, aonde o exercício deseja atingir?
 
@@ -207,7 +207,7 @@ O exercício pede claramente a construção de uma método chamado `diagUnificad
 
 O próprio enunciado já oferece a construção das classes das estruturas de dados referenciadas. Seguem abaixo, uma imagem que demonstra essas estruturas que serão utilizadas para a construção do método:
 
-![alt text](image-2.png)
+![alt text](./img/image-02.png)
 
 Segue a listagem também, das estruturas que serão usadas:
 
@@ -258,6 +258,24 @@ CelulaDupla digUnificada() {
 
 - A lista simples presente dentro de cada célula da matriz apresenta uma `célula cabeça` que é nada mais, do que uma célula que serve de orientação para o início da lista criada. Portanto a linha que refere `Celula sentinelaCelula = sentinelaMatriz.inicio.prox;` deve **NECESSÁRIAMENTE** ter o atributo de referência para o próximo, `prox` para que assim seja ignorado a célula cabeça.
 - A lista dupla dessa vez não apresenta essa característica de ter uma célula cabeça, então não é necessário considerá-la. 
+
+## Questão 04 - Verdadeiro ou Falso: justifique
+
+### Questão 04 - Letra A
+
+#### Enunciado 
+
+*Não é possível desenhar uma árvore binária de busca tendo apenas o caminhamento em Pós-Ordem a seguir:*
+
+*Pós-ordem: [4, 5, 6, 8, 7, 12, 18, 15, 10, 37, 42, 40, 55, 50, 20]*
+
+#### Resposta
+
+É possível construir uma árvore por meio do seu caminhamento em `pós-ordem` visto que esse caminhamento apresenta uma forma de construção e leitura dos dados.
+
+O caminhamento `pós-ordem` faz a leitura da sub-árvore a esquerda, da sub-árvore a direita e por fim mostra a raiz, seguindo sempre esse mesmo padrão. Desse modo é possível encontrar padrões dessa estrutura.
+
+- O último elemento será sempre a raiz
 
 
 
