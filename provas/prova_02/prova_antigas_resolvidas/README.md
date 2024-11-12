@@ -9,9 +9,7 @@ Abaixo, é apresentada a estrutura do código e uma ilustração que mostra a li
 
 ### Interpretação
 
-A questão referência a utilização de uma lista como maneira de criar e organizar uma estrutura de meiose. O conceito de `meiose` trata-se de uma repartição uma única célula em duas, nesse caso, o valor presente dentro de uma célula pai, como a exemplo, o valor `8`, se tornará `4` em duas células distintas (filhas). Segue o exemplo na imagem abaixo:
-
-![Meiose](./img/image.png)
+A questão referência a utilização de uma lista como maneira de criar e organizar uma estrutura de meiose. O conceito de `meiose` trata-se de uma repartição uma única célula em duas, nesse caso, o valor presente dentro de uma célula pai, como a exemplo, o valor `8`, se tornará `4` em duas células distintas (filhas).
 
 Nota-se que as duas células criadas deverão ser conectadas, para que assim a estrutura não perca sua sequencia como uma lista encadeada flexível. O exemplo abaixo demostra como funcionará de modo amplo essa meiose:
 
@@ -276,6 +274,29 @@ CelulaDupla digUnificada() {
 O caminhamento `pós-ordem` faz a leitura da sub-árvore a esquerda, da sub-árvore a direita e por fim mostra a raiz, seguindo sempre esse mesmo padrão. Desse modo é possível encontrar padrões dessa estrutura.
 
 - O último elemento será sempre a raiz
+- O penúltimo elemento será direcionado a direita
+- Os pŕoximos serão direcionados de acordo com o valor perante ao sub-sequentes valores
+
+##### Resposta - Informações importantes
+
+1. Da parte superior da árvore até a inferior os valores só crescem.
+2. A ordem de inserção por meio do "print" da árvore segue a ordem inversa de funcionamento do método de caminhamento
+   1. **Ordem padrão:**
+      1. Esquerda
+      2. Direita
+      3. Print
+   2. **Ordem que iremos usar:**
+      1. Print
+      2. Direita
+      3. Esquerda
+
+###### Ressalvas sobre os métodos de caminhamento
+
+Dentro do conceito de árvores temos três tipos de caminhamentos, sendo eles: **central, pré-ordem e pós-ordem**. Tendo suas características exemplificadas abaixo:
+
+- **Central:** o caminhamento central sempre irá printar o valores em ordem crescente, sendo a sequência definida por: primeiro a sub-árvore a esquerda, a raiz e por fim a sub-árvore a direita. A partir do print desse tipo de caminhamento não é possível encontrar a sua árvore, pois, somente uma árvore pode oferecer diversos tipo de caminhamento central.
+- **Pré-ordem:** conhecido por apresentar seu "print" antes do caminhamento, ele printa todas as raízes e por fim as suas folhas. Printando na sequência: sua raiz, sua sub-árvore a esquerda e por fim a sua sub-árvore a direita.
+- **Pós-ordem:** tendo seu print no fim do caminhamento, o seu último elemento a ser exibido é a sua raiz. Ele irá printar, toda a sub-árvore a esquerda, após toda a sub-árvore a direita e por fim sua raiz. A partir do seu print é possível encontrar sua árvore já que não resta dúvidas sobre aonde estão seus elementos.
 
 
 
