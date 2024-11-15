@@ -606,7 +606,7 @@ int main()
             {
                 inserirFim(*pk_find);
             }
-            else if (strcmp(cmd, "RI") == 0)
+            else if (strcmp(cmd, "R") == 0)
             {
                 Pokemons pkRI = removerInicio();
                 printf("(R) %s\n", pkRI.name);
