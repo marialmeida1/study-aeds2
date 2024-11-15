@@ -40,6 +40,27 @@ typedef struct // "Classe" Pokemons
     Date captureDate;
 } Pokemons;
 
+// Lista dinâmica
+typedef struct Cel
+{
+    Pokemons el;
+    struct Cel *prox;
+    struct Cel *ant;
+} Cel;
+
+Cel *newCel(Pokemons x)
+{
+    Cel *tmp = (Cel *)malloc(sizeof(Cel));
+    tmp->el = x;
+    tmp->prox = NULL;
+    tmp->ant = NULL;
+    return tmp;
+}
+
+// CLASSE LIST
+Cel *first;
+Cel *last;
+
 // ====== GERENCIAMENTO DA LISTA ======
 // Inciar lista
 void initList(List *list)
@@ -147,6 +168,16 @@ char *formatDate(Date date)
     snprintf(dateStr, 11, "%02d/%02d/%04d", date.day, date.month, date.year);
 
     return dateStr;
+}
+
+int tamanho()
+{
+    int tam = 0;
+    for (Cel *i = first; i != NULL; i = i->prox)
+    {
+        tam++;
+    }
+    return tam;
 }
 
 // ========= Funções básicas para a manipulação da classe pokemons ========
@@ -330,6 +361,190 @@ void read(char *line, Pokemons *pokemons)
     pokemons->captureDate = date;
 }
 
+// ====== GERENCIAMENTO DA LISTA CLASSE ======{
+// Inserir no início
+void inserirInicio(Pokemons x)
+{
+    Cel *tmp = newCel(x);
+
+    if (first == NULL)
+    {
+        first = last = tmp;
+    }
+    else
+    {
+        tmp->prox = first;
+        first->ant = tmp;
+        first = tmp;
+    }
+}
+
+// Inserir no final
+void inserirFim(Pokemons x)
+{
+    Cel *tmp = newCel(x);
+
+    if (last == NULL)
+    {
+        first = last = tmp;
+    }
+    else
+    {
+        tmp->ant = last;
+        last->prox = tmp;
+        last = tmp;
+    }
+}
+
+// Inserir em qualquer posição
+void inserir(Pokemons x, int pos)
+{
+    int tam = tamanho();
+
+    if (pos < 0 || pos > tam)
+    {
+        printf("Erro ao inserir posição (%d/ tamanho = %d) inválida!\n", pos, tam);
+    }
+    else if (pos == 0)
+    {
+        inserirInicio(x);
+    }
+    else if (pos == tam)
+    {
+        inserirFim(x);
+    }
+    else
+    {
+        Cel *tmp = newCel(x);
+        Cel *i = first;
+
+        // Caminha até a posição
+        for (int j = 0; j < pos; j++, i = i->prox)
+            ;
+
+        tmp->prox = i;
+        tmp->ant = i->ant;
+        i->ant->prox = tmp;
+        i->ant = tmp;
+    }
+}
+
+// Remover do início
+Pokemons removerInicio()
+{
+    if (first == NULL)
+    {
+        printf("Erro ao remover (lista vazia)!\n");
+        exit(1);
+    }
+
+    Cel *tmp = first;
+    Pokemons resp = first->el;
+
+    if (first == last)
+    {
+        first = last = NULL;
+    }
+    else
+    {
+        first = first->prox;
+        first->ant = NULL;
+    }
+
+    free(tmp);
+    return resp;
+}
+
+// Remover do final
+Pokemons removerFim()
+{
+    if (last == NULL)
+    {
+        printf("Erro ao remover (lista vazia)!\n");
+        exit(1);
+    }
+
+    Cel *tmp = last;
+    Pokemons resp = last->el;
+
+    if (first == last)
+    {
+        first = last = NULL;
+    }
+    else
+    {
+        last = last->ant;
+        last->prox = NULL;
+    }
+
+    free(tmp);
+    return resp;
+}
+
+// Remover de qualquer posição
+Pokemons remover(int pos)
+{
+    int tam = tamanho();
+
+    if (first == NULL)
+    {
+        printf("Erro ao remover (lista vazia)!\n");
+        exit(1);
+    }
+    else if (pos < 0 || pos >= tam)
+    {
+        printf("Erro ao remover posição (%d/ tamanho = %d) inválida!\n", pos, tam);
+        exit(1);
+    }
+    else if (pos == 0)
+    {
+        return removerInicio();
+    }
+    else if (pos == tam - 1)
+    {
+        return removerFim();
+    }
+    else
+    {
+        Cel *i = first;
+
+        // Caminha até a posição
+        for (int j = 0; j < pos; j++, i = i->prox)
+            ;
+
+        Pokemons resp = i->el;
+        i->ant->prox = i->prox;
+        i->prox->ant = i->ant;
+        free(i);
+        return resp;
+    }
+}
+
+// Mostrar elementos da lista
+void mostrar()
+{
+    Cel *i;
+    int cont = 0;
+    for (i = first; i != NULL; i = i->prox)
+    {
+        print(&i->el);
+        cont++;
+    }
+}
+
+// Mostrar elementos na ordem inversa
+void mostrarReverso()
+{
+    Cel *i;
+    int cont = tamanho() - 1;
+    for (i = last; i != NULL; i = i->ant)
+    {
+        printf("[%d] ", cont);
+        print(&i->el);
+        cont--;
+    }
+}
+
 // Variáveis globais
 static Pokemons listPokemons[MAX_CLASS];
 static char PATH[] = "/tmp/pokemon.csv";
@@ -401,49 +616,60 @@ void cloneArray(int id, Pokemons *newArray, int *pos)
     }
 }
 
-void swap(Pokemons *a, Pokemons *b)
+void swapNodes(Cel *nodeA, Cel *nodeB)
 {
-    Pokemons temp = *a;
-    *a = *b;
-    *b = temp;
+    if (nodeA == NULL || nodeB == NULL)
+    {
+        printf("Erro: Não é possível trocar nós nulos.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    Pokemons temp = nodeA->el;
+    nodeA->el = nodeB->el;
+    nodeB->el = temp;
+
     movements++;
 }
 
-int partition(Pokemons arr[], int low, int high)
+Cel* partition(Cel *low, Cel *high)
 {
-    Pokemons pivot = arr[high];
-    int i = (low - 1);
+    Pokemons pivot = high->el; 
+    Cel *i = low->ant;        
 
-    for (int j = low; j < high; j++)
+    for (Cel *j = low; j != high; j = j->prox)
     {
         comparisons++;
-        if (arr[j].generation < pivot.generation ||
-            (arr[j].generation == pivot.generation && strcmp(arr[j].name, pivot.name) < 0))
+        if (j->el.generation < pivot.generation ||
+            (j->el.generation == pivot.generation &&
+             strcmp(j->el.name, pivot.name) < 0))
         {
-            i++;
-            swap(&arr[i], &arr[j]);
+            i = (i == NULL) ? low : i->prox;
+            swapNodes(i, j);
         }
     }
-    swap(&arr[i + 1], &arr[high]);
-    return (i + 1);
+
+    i = (i == NULL) ? low : i->prox;
+    swapNodes(i, high);
+    return i;
 }
 
-void quickSort(Pokemons arr[], int low, int high)
-{
-    if (low < high)
-    {
-        int pi = partition(arr, low, high);
 
-        quickSort(arr, low, pi - 1);
-        quickSort(arr, pi + 1, high);
+void quickSort(Cel *low, Cel *high)
+{
+    if (low != NULL && high != NULL && low != high && low != high->prox)
+    {
+        Cel *pi = partition(low, high);
+
+        quickSort(low, pi->ant);
+        quickSort(pi->prox, high);
     }
 }
 
 void generatorLog(long executionTime)
 {
     char matricula[] = "863593_quicksort";
-    char nomeArquivo[20];
-    snprintf(nomeArquivo, sizeof(nomeArquivo), "%s_1.txt", matricula);
+    char nomeArquivo[32];
+    snprintf(nomeArquivo, sizeof(nomeArquivo), "%s.txt", matricula);
 
     FILE *file = fopen(nomeArquivo, "w");
     if (file == NULL)
@@ -475,17 +701,29 @@ int main()
         if (i == 0)
         {
             int id = atoi(ln);
-            cloneArray(id, newArray, &pos);
-            pos++;
+            Pokemons *pokemon = findID(id);
+            if (id != 0)
+            {
+                if (pokemon != NULL)
+                {
+                    inserirFim(*pokemon);
+                }
+                else
+                {
+                    printf("Pokemon não encontrado!\n");
+                }
+            }
         }
         scanf("%s", ln);
     }
 
-    quickSort(newArray, 0, pos);
+    int size = tamanho();
+    quickSort(first, last);
     for (int i = 0; i < pos; i++)
     {
         print(&newArray[i]);
     }
+    mostrar();
 
     clock_gettime(CLOCK_MONOTONIC, &end);
     long elapsedTime = (end.tv_sec - start.tv_sec) * 1e9 + (end.tv_nsec - start.tv_nsec);
