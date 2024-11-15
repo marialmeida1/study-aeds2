@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <math.h>
 
 // Variáveis globais
 #define MAX_STRING 1024
@@ -381,90 +382,7 @@ void start()
     last->prox = first;
 }
 
-// INSERIR
-// Inserir Início
-void inserirInicio(Pokemons x)
-{
-    Cel *tmp = newCel(x);
-
-    if (first == NULL)
-    {
-        first = tmp;
-        last = first;
-        first->prox = first;
-    }
-    else
-    {
-        tmp->prox = first;
-        first = tmp;
-        last->prox = first;
-    }
-}
-
-// Inserir End
-void inserirFim(Pokemons x)
-{
-    Cel *tmp = newCel(x);
-
-    if (first == NULL)
-    {
-        first = tmp;
-        last = first;
-        first->prox = first;
-    }
-    else
-    {
-        last->prox = tmp;
-        last = tmp;
-        last->prox = first;
-    }
-}
-
-// Inserir qualquer posição
-void inserir(Pokemons x, int pos)
-{
-    int tam = tamanho();
-
-    if (pos < 0 || pos > tam)
-    {
-        printf("Erro ao inserir posicao (%d/ tamanho = %d) invalida!", pos, tam);
-    }
-    else if (pos == 0)
-    {
-        inserirInicio(x);
-    }
-    else if (pos == tam)
-    {
-        inserirFim(x);
-    }
-    else
-    {
-        // Caminhar até a posição anterior à inserção
-        int j;
-        Cel *i = first;
-
-        // Circularidade: percorrer até a posição desejada
-        for (j = 0; j < pos - 1; j++, i = i->prox)
-        {
-            // No final da fila, retorna para o primeiro elemento
-            if (i->prox == first)
-            {
-                break; // Este caso é necessário para não ultrapassar o final da fila circular
-            }
-        }
-
-        Cel *tmp = newCel(x);
-        tmp->prox = i->prox;
-        i->prox = tmp;
-
-        // Caso o item inserido seja o último, atualizar o last
-        if (tmp->prox == first)
-        {
-            last = tmp;
-        }
-    }
-}
-
+// Remover início
 Pokemons removerInicio()
 {
     if (first == NULL)
@@ -480,82 +398,57 @@ Pokemons removerInicio()
     {
         free(first);
         first = last = NULL;
+        numElementos--;
     }
     else
     {
         first = first->prox;
         last->prox = first;
+        numElementos--;
         free(tmp);
     }
 
     return resp;
 }
 
-Pokemons removerFim()
+// Inserir End
+void inserirFim(Pokemons x)
 {
-    if (first == NULL)
-    {
-        printf("Erro ao remover! A fila está vazia.\n");
-        exit(1);
+
+    if(numElementos == 5){
+        Pokemons resp = removerInicio();
     }
 
-    if (first == last)
-    {
-        Pokemons resp = first->el;
-        free(first);
-        first = last = NULL;
-        return resp;
-    }
-
-    Cel *i = first;
-    while (i->prox != last)
-    {
-        i = i->prox;
-    }
-
-    Pokemons resp = last->el;
-    free(last);
-    last = i;
-    last->prox = first;
-    return resp;
-}
-
-Pokemons remover(int pos)
-{
-    Pokemons resp;
-    int tam = tamanho();
+    Cel *tmp = newCel(x);
 
     if (first == NULL)
     {
-        printf("Erro ao remover! A fila está vazia.\n");
-        exit(1);
-    }
-    else if (pos < 0 || pos >= tam)
-    {
-        printf("Erro ao remover posicao (%d/ tamanho = %d) invalida!", pos, tam);
-    }
-    else if (pos == 0)
-    {
-        resp = removerInicio();
-    }
-    else if (pos == tam - 1)
-    {
-        resp = removerFim();
+        first = tmp;
+        last = first;
+        first->prox = first;
+        numElementos++;
     }
     else
     {
-        Cel *i = first;
-        int j;
-        for (j = 0; j < pos - 1; j++, i = i->prox)
-            ;
-
-        Cel *tmp = i->prox;
-        resp = tmp->el;
-        i->prox = tmp->prox;
-
-        free(tmp);
+        last->prox = tmp;
+        last = tmp;
+        last->prox = first;
+        numElementos++;
     }
-    return resp;
+
+    int sum = 0;
+
+    Cel *i = first;
+    int cont = 0;
+    do
+    {
+        sum += i->el.captureRate;
+        i = i->prox;
+    } while (i != first);
+
+    int media = round((double)sum / numElementos);
+    printf("Média: %d", media);
+    printf("\n");
 }
 
 void mostrar()
@@ -637,7 +530,6 @@ Pokemons *findID(int id)
 
 int main()
 {
-    start();
     setListPokemons();
     char ln[MAX_STRING];
 
@@ -710,15 +602,7 @@ int main()
         // Switch Case (IF)
         if (cmd != NULL)
         {
-            if (strcmp(cmd, "II") == 0)
-            {
-                inserirInicio(*pk_find);
-            }
-            else if (strcmp(cmd, "I*") == 0)
-            {
-                inserir(*pk_find, pos);
-            }
-            else if (strcmp(cmd, "IF") == 0)
+            if (strcmp(cmd, "I") == 0)
             {
                 inserirFim(*pk_find);
             }
@@ -726,16 +610,6 @@ int main()
             {
                 Pokemons pkRI = removerInicio();
                 printf("(R) %s\n", pkRI.name);
-            }
-            else if (strcmp(cmd, "R*") == 0)
-            {
-                Pokemons pkR = remover(pos);
-                printf("(R) %s\n", pkR.name);
-            }
-            else if (strcmp(cmd, "RF") == 0)
-            {
-                Pokemons pkRF = removerFim();
-                printf("(R) %s\n", pkRF.name);
             }
             else
             {
