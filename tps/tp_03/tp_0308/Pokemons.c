@@ -2,11 +2,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <time.h>
 
 // Variáveis globais
 #define MAX_STRING 1024
 #define MAX_LIST 10
-#define MAX_LIST_CLASS 100
 #define MAX_CLASS 1000
 
 // Estruturas de struct
@@ -40,46 +40,14 @@ typedef struct // "Classe" Pokemons
     Date captureDate;
 } Pokemons;
 
-// Lista dinâmica
-typedef struct Cel
-{
-    Pokemons el;
-    struct Cel *prox;
-} Cel;
-
-Cel *newCel(Pokemons x)
-{
-    Cel *novo = (Cel *)malloc(sizeof(Cel));
-    if (novo == NULL)
-    {
-        printf("Erro ao alocar memória!\n");
-        exit(1);
-    }
-    novo->el = x;
-    novo->prox = NULL;
-    return novo;
-}
-
-// CLASSE LIST
-Cel *top;
-
-void push(Pokemons x);
-Pokemons pop();
-
-typedef struct // "Classe" Lista para Classe
-{
-    int n;
-    Pokemons element[MAX_LIST_CLASS];
-} ListPokemons;
-
-// ====== GERENCIAMENTO DA LISTA ATRIBUTOS ======
+// ====== GERENCIAMENTO DA LISTA ======
 // Inciar lista
 void initList(List *list)
 {
     list->n = 0;
     for (int i = 0; i < MAX_LIST; i++)
     {
-        list->element[i] = NULL; // Inicializa os els como NULL
+        list->element[i] = NULL; // Inicializa os elementos como NULL
     }
 }
 
@@ -99,7 +67,7 @@ int insertList(List *list, char *el)
     return 0;
 }
 
-// Mostra els da lista
+// Mostra elementos da lista
 void showList(List *list)
 {
     for (int i = 0; i < list->n; i++)
@@ -124,7 +92,7 @@ int indexOf(const char *str, const char *find)
     return -1;
 }
 
-// Retorna um recorte de uma string
+// Retorna um recolorte de uma string
 char *substring(const char *str, int start, int lenght)
 {
     // Se "não foi" colocado valor seta como o tamanho da string
@@ -362,79 +330,11 @@ void read(char *line, Pokemons *pokemons)
     pokemons->captureDate = date;
 }
 
-// ====== GERENCIAMENTO DA LISTA CLASSE ======
-void start()
-{
-    Pokemons pokemonNew;
-    Date pokemonNewCaptureDate = {20, 8, 2020}; // Exemplo de data
-    initPokemon(&pokemonNew, 25, 1, "Pikachu", "O Pokémon elétrico.", 6.0, 0.4, 50, 0, pokemonNewCaptureDate);
-    push(pokemonNew);
-}
-
-// INSERIR
-// Inserir Início
-void push(Pokemons x)
-{
-    Cel *tmp = newCel(x);
-    tmp->prox = top;
-    top = tmp;
-}
-
-Pokemons pop()
-{
-    if (top == NULL)
-    {
-        printf("Erro: a pilha está vazia!\n");
-        exit(1);
-    }
-
-    Cel *tmp = top;
-    Pokemons resp = top->el;
-    top = top->prox;
-    free(tmp);
-    return resp;
-}
-
-void mostrar()
-{
-    Cel *auxStack = NULL;
-    Cel *i = top->prox;
-    int cont = 0;
-
-    // Transferir elementos para uma pilha auxiliar para inverter a ordem
-    while (i != NULL)
-    {
-        Cel *novo = (Cel *)malloc(sizeof(Cel));
-        if (novo == NULL)
-        {
-            printf("Erro ao alocar memória!\n");
-            exit(1);
-        }
-        novo->el = i->el;
-        novo->prox = auxStack;
-        auxStack = novo;
-        i = i->prox;
-    }
-
-    // Imprimir os elementos da pilha auxiliar (na ordem de inserção original)
-    while (auxStack != NULL)
-    {
-        printf("[%d] ", cont);
-        print(&auxStack->el);
-
-        // Remover o elemento do topo da pilha auxiliar
-        Cel *tmp = auxStack;
-        auxStack = auxStack->prox;
-        free(tmp);
-
-        cont++;
-    }
-}
-
-
 // Variáveis globais
 static Pokemons listPokemons[MAX_CLASS];
 static char PATH[] = "/tmp/pokemon.csv";
+static int comparisons = 0;
+static int movements = 0;
 /*
  * ======================================================
  * MÉTODOS DE INTERAÇÃO DOS DADOS
@@ -490,98 +390,106 @@ Pokemons *findID(int id)
     return NULL;
 }
 
+void cloneArray(int id, Pokemons *newArray, int *pos)
+{
+    for (int i = 0; listPokemons[i].name[0] != '\0'; i++)
+    {
+        if (listPokemons[i].id == id)
+        {
+            newArray[*(pos)] = listPokemons[i];
+        }
+    }
+}
+
+void swap(Pokemons *a, Pokemons *b)
+{
+    Pokemons temp = *a;
+    *a = *b;
+    *b = temp;
+    movements++;
+}
+
+int partition(Pokemons arr[], int low, int high)
+{
+    Pokemons pivot = arr[high];
+    int i = (low - 1);
+
+    for (int j = low; j < high; j++)
+    {
+        comparisons++;
+        if (arr[j].generation < pivot.generation ||
+            (arr[j].generation == pivot.generation && strcmp(arr[j].name, pivot.name) < 0))
+        {
+            i++;
+            swap(&arr[i], &arr[j]);
+        }
+    }
+    swap(&arr[i + 1], &arr[high]);
+    return (i + 1);
+}
+
+void quickSort(Pokemons arr[], int low, int high)
+{
+    if (low < high)
+    {
+        int pi = partition(arr, low, high);
+
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
+    }
+}
+
+void generatorLog(long executionTime)
+{
+    char matricula[] = "863593_quicksort";
+    char nomeArquivo[20];
+    snprintf(nomeArquivo, sizeof(nomeArquivo), "%s_1.txt", matricula);
+
+    FILE *file = fopen(nomeArquivo, "w");
+    if (file == NULL)
+    {
+        printf("Erro ao abrir o arquivo de log: %s\n", nomeArquivo);
+        return;
+    }
+
+    fprintf(file, "Matrícula\tTempo\tBigO\tValor de Comparações\tValor de Movimentações\n");
+    fprintf(file, "%s\t%ld\tO(n * log(n)))\t%d\t%d\n", matricula, executionTime, comparisons, movements);
+    fclose(file);
+}
+
 int main()
 {
+    struct timespec start, end;
+    clock_gettime(CLOCK_MONOTONIC, &start);
     setListPokemons();
+    Pokemons newArray[MAX_CLASS];
     char ln[MAX_STRING];
+    int i = 0;
+    int pos = 0;
 
-    while (fgets(ln, sizeof(MAX_STRING), stdin))
+    scanf("%s", ln);
+
+    while (strcmp(ln, "FIM") != 0)
     {
         ln[strcspn(ln, "\n")] = 0;
-        if (strcmp(ln, "FIM") == 0)
+        if (i == 0)
         {
-            break;
+            int id = atoi(ln);
+            cloneArray(id, newArray, &pos);
+            pos++;
         }
-
-        int id = atoi(ln);
-        Pokemons *pokemon = findID(id);
-        if (id != 0)
-        {
-            if (pokemon != NULL)
-            {
-                push(*pokemon);
-            }
-            else
-            {
-                printf("Pokemon não encontrado!\n");
-            }
-        }
+        scanf("%s", ln);
     }
 
-    /*printf("Valores inseridos: \n");
-    mostrar();*/
-    int qtd = 0;
-    scanf("%d", &qtd);
-    char str_cmd[MAX_STRING];
-
-    for (int i = 0; i <= qtd; i++)
+    quickSort(newArray, 0, pos);
+    for (int i = 0; i < pos; i++)
     {
-        char *parts[3];
-        Pokemons *pk_find = NULL;
-        char *cmd = NULL;
-        int id = 0;
-
-        fgets(str_cmd, MAX_STRING, stdin);
-        str_cmd[strcspn(str_cmd, "\n")] = 0;
-
-        parts[0] = strtok(str_cmd, " ");
-        parts[1] = strtok(NULL, " ");
-        parts[2] = strtok(NULL, " ");
-
-        if (parts[0] != NULL)
-        {
-            cmd = parts[0];
-        }
-
-        if (parts[2] != NULL)
-        {
-            pos = atoi(parts[1]);
-            id = atoi(parts[2]);
-            pk_find = findID(id);
-        }
-        else if (parts[1] != NULL)
-        {
-
-            if (strcmp(cmd, "R*") == 0)
-            {
-                pos = atoi(parts[1]);
-            }
-            else
-            {
-                id = atoi(parts[1]);
-                pk_find = findID(id);
-            }
-        }
-
-        // Switch Case (IF)
-        if (cmd != NULL)
-        {
-            if (strcmp(cmd, "I") == 0)
-            {
-                push(*pk_find);
-            }
-            else if (strcmp(cmd, "R") == 0)
-            {
-                Pokemons pkRF = pop();
-                printf("(R) %s\n", pkRF.name);
-            }
-            else
-            {
-                printf("Comando não reconhecido.\n");
-            }
-        }    
+        print(&newArray[i]);
     }
 
-    mostrar();
+    clock_gettime(CLOCK_MONOTONIC, &end);
+    long elapsedTime = (end.tv_sec - start.tv_sec) * 1e9 + (end.tv_nsec - start.tv_nsec);
+    generatorLog(elapsedTime);
+
     return 0;
 }
